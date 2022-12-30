@@ -63,30 +63,61 @@ const ViewContent:React.FC<{project:Project[]}>=({project})=>{
 }
 
 
+const RegistorProject:FC<{name:string,start:string,end:string}> = ({name,start,end}) => {
 
-// プロジェクトの追加
-const AddContent=()=>{
-  const [name,setName]=useState('')
-  const [start,setStart]=useState('')
-  const [end,setEnd]=useState('')
-  return
-  (
-    <div>
-      圃場名<input type="text" onChange={e=>setName(e.target.value)}/>
-      開始日 <input type="text" name="" id="" onChange={e=>setStart(e.target.value)}/>
-      終了日 <input type="text" name="" id="" onChange={e=>setEnd(e.target.value)}/>
-      <button>登録</button>
-    </div>
-  )
+
+  // const getIp = () => {  
+  //       axios.post('http://127.0.0.1:8000/registor',{
+  //           name:name,
+  //           start:start,
+  //           end:end,
+  //       })
+  //       .then(res=>{
+  //           if(res.data.status){
+  //               window.location.href='/hero.com/main'
+  //           }
+  //       })
+  // };
+  return(
+      <div className='login_element button' onClick={e=>{
+        console.log('name',name);
+        console.log('start',start);
+        console.log('end',end);}
+
+      }>プロジェクト登録</div>
+      )
 }
 
 
 function App() {
   const [project,setProject]=useState<Project[]>(projectList);
- 
+  const [name,setName]=useState('')
+  const [start,setStart]=useState('')
+  const [end,setEnd]=useState('')
   return (
     <div className="App">
+      
         {/* <AddContent/> */}
+
+
+        <div>
+      圃場名<input type="text" onChange={e=>setName(e.target.value)}/> <br/>
+      開始日 <input type="text" name="" id="" onChange={e=>setStart(e.target.value)}/> <br/>
+      終了日 <input type="text" name="" id="" onChange={e=>setEnd(e.target.value)}/> <br/>
+
+      <RegistorProject
+      name={name}
+      start={start}
+      end={end}
+      />
+    {/* name{name}::
+    start{start}::
+    end{end}:: */}
+
+      {/* <button  onClick={e=>RegistorProject({name,start,end})}>登録</button><br/> */}
+      ーーーーーーーーー
+    </div>
+
         <ViewContent 
         project={project}/>
 
