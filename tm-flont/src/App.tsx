@@ -66,26 +66,33 @@ const ViewContent:React.FC<{project:Project[]}>=({project})=>{
 const RegistorProject:FC<{name:string,start:string,end:string}> = ({name,start,end}) => {
 
 
-  // const getIp = () => {  
-  //       axios.post('http://127.0.0.1:8000/registor',{
-  //           name:name,
-  //           start:start,
-  //           end:end,
-  //       })
-  //       .then(res=>{
-  //           if(res.data.status){
-  //               window.location.href='/hero.com/main'
-  //           }
-  //       })
-  // };
+  const getIp = () => {  
+        axios.post('http://127.0.0.1:8000/project',{
+            name:name,
+            start:start,
+            end:end,
+        })
+        .then(res=>{
+            if(res.data.status){
+                // window.location.href='/hero.com/main'
+                console.log(res.data.status)
+            }else{
+              console.log('ng')
+            }
+        })
+  };
   return(
-      <div className='login_element button' onClick={e=>{
-        console.log('name',name);
-        console.log('start',start);
-        console.log('end',end);}
-
-      }>プロジェクト登録</div>
-      )
+      <button className='login_element button' onClick={getIp}>プロジェクト登録</button>
+        )
+        
+      //   {
+      //   console.log('name',name);
+      //   console.log('start',start);
+      //   console.log('end',end);
+      
+      // }
+      
+    
 }
 
 
