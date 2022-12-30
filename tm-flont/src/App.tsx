@@ -95,6 +95,23 @@ const RegistorProject:FC<{name:string,start:string,end:string}> = ({name,start,e
     
 }
 
+const GetProject:FC<{}> = ({}) => {
+  
+  const getIp = () => {  
+    axios.get('http://127.0.0.1:8000/project/get')
+    .then(res=>{
+            console.log(res.data)
+    })
+};
+
+return(
+  <div>
+    <button onClick={getIp}>取得</button>
+  </div>
+)
+
+}
+
 
 function App() {
   const [project,setProject]=useState<Project[]>(projectList);
@@ -112,16 +129,15 @@ function App() {
       開始日 <input type="text" name="" id="" onChange={e=>setStart(e.target.value)}/> <br/>
       終了日 <input type="text" name="" id="" onChange={e=>setEnd(e.target.value)}/> <br/>
 
+
       <RegistorProject
       name={name}
       start={start}
       end={end}
       />
-    {/* name{name}::
-    start{start}::
-    end{end}:: */}
 
-      {/* <button  onClick={e=>RegistorProject({name,start,end})}>登録</button><br/> */}
+      <GetProject/>
+      
       ーーーーーーーーー
     </div>
 
