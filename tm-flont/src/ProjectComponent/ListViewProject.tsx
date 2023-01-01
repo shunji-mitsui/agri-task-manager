@@ -27,10 +27,16 @@ export const UpDateProject = (id:string,changeTitle:string,changeContent:string)
     id:id,
     changeContent:changeContent,
     changeTitle:changeTitle
-  }).then((res)=>console.log(res.data))
-  console.log('id',id)
-  console.log('変更タイトル',changeTitle)
-  console.log('変更部分',changeContent)
+  }).then((res)=>
+  {if (res.data.status==100){
+    alert('その期間は別の予定が入っています。')
+  }else if(res.data.status==101){
+    alert('開始日が終了日よりも後になっています。')
+  }
+  console.log(res.data)})
+  // console.log('id',id)
+  // console.log('変更タイトル',changeTitle)
+  // console.log('変更部分',changeContent)
   }
   
 
@@ -62,7 +68,109 @@ export const OneProjectView:FC<{id:string,title:string,name:string,inputType:str
           )}
     }
 
+export const SelectorTask:FC<{taskDate:string,id:string,}> = ({taskDate,id}) =>{
+  const [flag,setFlag]=useState(true);
+  const [taskContent,setTaskContent]=useState('');
+  const postTask=()=>{
+    axios.post('http://127.0.0.1:8000/task/create',{
+      parentId:id,
+      task:taskContent,
+      date:taskDate,
+    }).then(res=>console.log(res.data))
+  }
+  if(flag){
+    return(
+      <div>
+        <select name="example" onChange={
+          e=>{
+            if(e.target.value=='other'){
+              setFlag(!flag);
+            }else{
+              setTaskContent(e.target.value)
+            }
+          }
+        }>
+          <option value="サンプル1">追肥</option>
+          <option value="サンプル2">草抜き</option>
+          <option value="サンプル3">マルチ貼り</option>
+          <option value="other">手動入力</option>
+        </select>
+        <button onClick={postTask}>決定</button>
+      </div>
+    )
+  }else {
+    return(
+    <div>
+      タスクを入力
+      <input type="text" onChange={e=>setTaskContent(e.target.value)}/>
+      <button onClick={postTask}>決定</button>
+    </div>
+  )}
 
+}
+
+
+export const RegistorFormForChildTask:FC<{id:string}> = ({id}) =>{
+  const [taskDate,setTaskDate]=useState('')
+  return(
+    <div>
+      <SelectorTask taskDate={taskDate} id={id}/>
+      <br/><input type="Date" onChange={e=>{setTaskDate(e.target.value)}}/>
+    </div>
+  )
+}
+
+
+export const AddChildProject:FC<{id:string,}> = ({id}) =>{
+  const [flag,setFlag]=useState(true)
+  const [vegetable,setVegetable]=useState('')
+  
+  if(flag){
+
+    return(
+      <div>
+      <button onClick={e=>{setFlag(!flag);console.log(flag)}}>＋</button>
+    </div>
+  )
+}else{
+  return(
+    <div>
+      <button onClick={e=>setFlag(!flag)}>ー</button><br/>
+      {/* 品目<br/><input type="text" onChange={e=>setVegetable(e.target.value)}/><br/> */}
+     <RegistorFormForChildTask id={id}/>
+
+    </div>
+  )
+}
+}
+
+
+export const ViewChildTask:FC<{id:string,}> = ({id}) =>{
+  const [childtask,setChildTask]=useState([{id:'',parentId:'',task:'',date:''}]);
+  useEffect(()=>{
+    axios.post(`http://127.0.0.1:8000/task/get`,{
+      id:id
+    })
+    .then(res=>{
+      console.log('huhuhuhuhuh',res.data);
+      setChildTask(res.data);
+    });
+  },[])
+  // const ViewChildTask=childtask.map((p)=>{
+  //   return(
+  //     <div id ={p.id}>
+  //       {p.parentId}
+  //       {p.task}
+  //       {p.date}
+  //     </div>
+  //   )
+  // })
+  return(
+    <div>
+      childtaskのviewコンポーンネントです。
+    </div>
+  )
+}
 
 export const ViewComponent=()=>{
     
@@ -82,6 +190,8 @@ export const ViewComponent=()=>{
                 <OneProjectView id={p.id} title='start' name={p.startDate} inputType='Date'/>
                 <OneProjectView id={p.id} title='end' name={p.endDate} inputType='Date'/>
                 <DeleteProject id={p.id} />
+                <AddChildProject id={p.id}/>
+                <ViewChildTask id={p.id}/>
               _______________________
             </div>
           </div>

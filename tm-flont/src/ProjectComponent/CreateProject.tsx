@@ -16,6 +16,11 @@ export const RegistorProject:FC<{name:string,start:string,end:string}> = ({name,
           })
           .then(res=>{
             console.log(res.data)
+            if(res.data.status==100){
+              alert('その期間は予定が入っています')
+            }else if(res.data.status==101){
+              alert('開始日が終了日よりも後になっています。')
+            }
           })
     };
     return(
@@ -23,7 +28,6 @@ export const RegistorProject:FC<{name:string,start:string,end:string}> = ({name,
             )
       
   }
-  
 
 export const CreateProject=()=>{
   const [name,setName]=useState('')
