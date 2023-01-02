@@ -28,6 +28,45 @@
   color: #61dafb;
 }
 
+.day{
+
+}
+
+.AllView{
+  border : solid 1px #333 ;
+
+}
+
+
+.TaskInfo{
+  display: flex;
+  margin-left: 0px;
+  padding-right: 0px;
+  border : solid 1px #333 ;
+
+  
+}
+
+.calender{
+  display: flex;
+  /* margin-top: 100px; */
+  margin-left: 200px;
+  border : solid 1px #333 ;
+  /* border:solid, #282c34,2px; */
+  
+}
+
+.M1{
+  margin-top: 100px;
+  border : solid 1px #333 ;
+}
+
+.D12{
+  margin-top: 200px;
+  border : solid 1px #333 ;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +75,5 @@
     transform: rotate(360deg);
   }
 }
+
+

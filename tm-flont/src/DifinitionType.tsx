@@ -1,11 +1,11 @@
 
 import React from 'react';
 
-interface childrenProject {
-    shildrenName:string,
-    startDate:string;
-    endDate:string;
-    content:string;
+export interface Task {
+    parentId:string,
+    id:string;
+    task:string,
+    date:string;
   }
   
 export interface Project {
@@ -13,6 +13,6 @@ export interface Project {
     name:string
     startDate:string;
     endDate:string;
-    // children:childrenProject[]
+    task:Task[]
   }
 
