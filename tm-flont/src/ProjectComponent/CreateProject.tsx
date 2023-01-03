@@ -39,7 +39,7 @@ export const CreateProject=()=>{
     <div>
 
       圃場名<input type="text" onChange={e=>setName(e.target.value)}/>
-      開始日 <input type="text" onChange={e=>setStart(e.target.value)}/>
+      開始日 <input type="date" onChange={e=>setStart(e.target.value)}/>
       終了日 <input type="date" name="" id="" onChange={e=>setEnd(e.target.value)}/>
       {/* <ProjectInfo /> */}
       <RegistorProject

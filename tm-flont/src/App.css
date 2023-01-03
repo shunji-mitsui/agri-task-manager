@@ -42,12 +42,29 @@
   display: flex;
 }
 
+.Navbar{
+  width:350px;
+  position: sticky;
+  left: 0;
+  opacity: 1;
+  background-color:white;
+}
+
 .TaskInfo{
   display: flex;
   margin-left: 0px;
   padding-left: 0px;
   /* padding-right: 0px; */
   border : solid 1px #333 ; 
+}
+
+.Istrue{
+  background-color: aquamarine;
+}
+
+
+.day{
+  width: 50px;
 }
 
 .calender{

@@ -20,7 +20,7 @@ export const DeleteProject:FC<{id:string}>=({id})=>{
         <button onClick={e=>{
           deleteProject()
         }
-          }> 削除</button>
+          }> プロジェクト削除</button>
       </div>
     )
   }

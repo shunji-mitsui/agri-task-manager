@@ -5,33 +5,200 @@ import {useState,useEffect,FC,createContext,useContext,useReducer} from 'react';
 import axios from 'axios';
 import {Project,Task} from '../DifinitionType'
 import {AContentByProject,DeleteProject} from './OneProjectView'
-import {SelectorTask,RegistorFormForChildTask,ViewChildTask,AddChildProject} from './ChildTask'
 import {Calender} from '../Calender'
 import dayjs from "dayjs";
+import isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(isBetween);
+
+const OneDayState:FC<{project:Project,day:string,
+  beforeChangeDay:string,setBeforeChangeDay:React.Dispatch<React.SetStateAction<string>>,
+  afterChangeDay:string,setAfterChangeDay:React.Dispatch<React.SetStateAction<string>>,
+  isChangeMode:boolean,setIsChangeMode:React.Dispatch<React.SetStateAction<boolean>>}>=(props)=>{
+  let flag=false
+  let content=''
+  let TaskList=[{id:'',task:''}]
+  props.project.task.map((t)=>{
+      if(t.date==props.day){
+        TaskList.push({task:t.task,id:t.id})
+      }else{
+        TaskList.push({task:'-',id:''})
+      }
+    })
 
 
 
+  if(dayjs(props.day).isBetween(props.project.startDate,props.project.endDate, null, '()')){
+    flag=true
+    content='○'
+  }else if(props.day==props.project.startDate){
+    flag=true
+    content='●'
+  }else if(props.day==props.project.endDate){
+    flag=true
+    content='●'
+  }else {
+    content=''
+  }
 
-const OneProject:FC<{project:Project}>=({project})=>{
+
+  const TaskListView=TaskList.map((t)=>{
+    if (!t.task){
+      return(
+        <div onClick={e=>{
+          const newTask = window.prompt("ユーザー名を入力してください", "");
+          axios.post('http://127.0.0.1:8000/task/create',{
+                parentId:props.project.id,
+                task:newTask,
+                date:props.day,
+            }).then(res=>console.log(res.data))
+        }}>
+          -
+        </div>
+      )
+    }
+    return(
+      <div onClick={e=>{
+        if(t.task!='-'){
+          if (window.confirm('完了しますか')){
+            axios.post('http://127.0.0.1:8000/task/delete',{id:t.id})
+          }
+        }else{
+
+          console.log('iiiiiiiiijijjj',t.id)
+          const newTask = window.prompt("ユーザー名を入力してください", "");
+          axios.post('http://127.0.0.1:8000/task/create',{
+                parentId:props.project.id,
+                task:newTask,
+                date:props.day,
+            }).then(res=>console.log(res.data))
+        }
+        }
+        
+      }
+      
+        >
+        {t.task}
+        </div>
+        )
+      })
   return(
     <div>
-      <AContentByProject id={project.id} title='name' content={project.name} inputType='Text'/>
-      <AContentByProject id={project.id} title='start' content={project.startDate} inputType='Date'/>
-      <AContentByProject id={project.id} title='end' content={project.endDate} inputType='Date' />
-      <DeleteProject id={project.id}/>
-      <AddChildProject id={project.id}/>
-      <ViewChildTask task={project.task}/>
+    <div className={flag?'Istrue':'' } 
+    onClick={e=>{
+        if (!props.isChangeMode){
+
+          props.setBeforeChangeDay(props.day)
+          props.setIsChangeMode(true)
+        }else{
+          props.setAfterChangeDay(props.day)
+          
+          axios.post('http://127.0.0.1:8000/project/update',{
+            id:props.project.id,
+            afterChangeDay:props.day
+          })
+          .then((res)=>{
+            console.log(res.data);
+          })
+
+          props.setIsChangeMode(false)
+        }
+        
+      }}
+      >
+      {/* {beforeChangeDay} */}
+      {/* {props.afterChangeDay} */}
+      {content}
+
+
+      </div>
+      <div>
+      {TaskListView}
+      </div>
+    </div>
+  )
+}
+
+const Gantt:FC<{project:Project,DayList:string[]}>=(props)=>{
+  
+const [beforeChangeDay,setBeforeChangeDay] =useState('') 
+const [afterChangeDay,setAfterChangeDay] =useState('') 
+const [isChangeMode,setIsChangeMode]=useState(false)
+  const ViewDay=props.DayList.map((d)=>{
+    let flag=false
+    return(
+      <div className='day'>
+        <OneDayState 
+        project={props.project} 
+        day={d}
+        beforeChangeDay={beforeChangeDay}
+        setBeforeChangeDay={setBeforeChangeDay}
+        afterChangeDay={afterChangeDay}
+        setAfterChangeDay={setAfterChangeDay}
+        isChangeMode={isChangeMode}
+        setIsChangeMode={setIsChangeMode}
+        
+        />
+        {/* {d} */}
+      </div>
+    )
+  })
+  return(
+    <div className='AllView'>
+      {ViewDay}
     </div>
   )
 }
 
 
+const OneProject:FC<{project:Project}>=({project})=>{
+
+  const DayList=[...Array(50)].map((_, i) => dayjs().add(i, 'd').format("YYYY-MM-DD")) 
+
+  return(
+    <div className='AllView'>
+      <div className='Navbar'>
+        <AContentByProject id={project.id} title='name' content={project.name} inputType='Text'/>
+        <DeleteProject id={project.id}/>
+
+      </div>
+      <Gantt project={project} DayList={DayList}/>
+    </div>
+  )
+}
+
+const Header=()=>{
+  const DayList=[...Array(50)].map((_, i) => dayjs().add(i, 'd').format("YYYY-MM-DD")) 
+  const ViewDay=DayList.map((d)=>{
+    return(
+      <div className='day'>
+        {d}
+      </div>
+    )
+  })
+  return(
+    <div className='AllView'>
+      <div className='Navbar'>
+        日付
+      </div>
+        {ViewDay}
+    </div>
+  )
+}
+
 const ListUpProject:FC<{projectList:Project[]}>=({projectList})=>{
   // const FlagList=[true,true,true,true]
-
-
+  const header:Project = {id:'header',name:'header',startDate:'header',endDate:'header',task:[{parentId:'header',id:'header',task:'header',date:'header'}]}
+  projectList.unshift(header)
 
   const LUP=projectList.map((p)=>{
+    if (p.id=='header'){
+      return(
+        <div>
+          <Header/>
+        </div>
+
+      )
+    }
     return(
       <div key={p.id}>
         <OneProject project={p}/>
@@ -45,48 +212,10 @@ const ListUpProject:FC<{projectList:Project[]}>=({projectList})=>{
       <div>
         {LUP}
       </div>
-      <Calender
-      ProjectList={projectList}
-      />
+
     </div>
   )
 }
-
-// const CalenderFunction=(projectList:Project[])=>{
-
-//   const[DaysMatrix,setDaysMatrix]=useState<TestDayType[]>()
-//   const month  =0
-//   const year = dayjs().year()
-//   const firstDayOfTheMonth = dayjs(new Date(2022, 1, 1)).day();
-//   let currentMonthCount = 0 - firstDayOfTheMonth
-
-  
-//   for (let i =0 ;i<40 ;i++){
-//     currentMonthCount++;
-//     // let daysmatrix
-//     const Day=String(new Date(year, month, currentMonthCount).getDate())
-//     const Month=String(new Date(year, month, currentMonthCount).getMonth()+1)
-//     const Year=String(new Date(year, month, currentMonthCount).getFullYear())
-    
-//     projectList.map((p)=>{
-//       console.log('p.startDate',p.startDate)
-//       console.log('カレンダーの日付',`${Year}-${Month}-${Day}`)
-//       if(p.startDate==`${Year}-${Month}-${Day}`){
-//         Days.push({year:Year,month:Month,day:Day,project:p.startDate})
-//         // console.log({year:Year,month:Month,day:Day,project:p.startDate})
-//         // return({year:Year,month:Month,day:Day,project:p.startDate})
-//       }else if(p.endDate==`${Year}-${Month}-${Day}`){
-//         Days.push({year:Year,month:Month,day:Day})
-//         // return({year:Year,month:Month,day:Day})
-//       }
-//     })
-//     let Days:any[]
-//   }
-//   setDaysMatrix(Days)
-
-//   return(DaysMatrix)
-// }
-
 
 
 export const ViewComponent=()=>{
