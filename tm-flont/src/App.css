@@ -42,8 +42,14 @@
   display: flex;
 }
 
+
+.debug{
+  border : solid 1px aquamarine; 
+  display: flex;
+}
+
 .Navbar{
-  width:350px;
+  width:200px;
   position: sticky;
   left: 0;
   opacity: 1;
@@ -51,7 +57,7 @@
 }
 
 .TaskInfo{
-  display: flex;
+  /* display: flex; */
   margin-left: 0px;
   padding-left: 0px;
   /* padding-right: 0px; */
@@ -61,6 +67,7 @@
 .Istrue{
   background-color: aquamarine;
 }
+
 
 
 .day{

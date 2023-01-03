@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
-import {ViewComponent} from './ProjectComponent/ListViewProject'
+import {ViewCalender} from './ProjectComponent/ViewProject'
 import {CreateProject} from './ProjectComponent/CreateProject'
 import dayjs from "dayjs";
-import {Calender} from './Calender'
+
 
 function App() {
   // const month  =dayjs().month()
@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       
       <CreateProject/>  
-      <ViewComponent/>
+      <ViewCalender/>
       
     </div>
   );

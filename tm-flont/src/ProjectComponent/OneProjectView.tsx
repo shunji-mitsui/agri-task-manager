@@ -47,31 +47,30 @@ export const UpDateProject = (id:string,changeTitle:string,changeContent:string)
   
 
 
-export const AContentByProject:FC<{id:string,title:string,content:string,inputType:string}>=({id,title,content,inputType})=>{
-    const viewTitle=
-    title=='name'?'圃場'
-    :title=='start'?'開始日'
-    :title=='end'?'終了日':'エラー';
+export const ProjectHeader:FC<{id:string,title:string,content:string}>=({id,title,content})=>{
+
     const [changeContent,setChangeContent]=useState('');
     const [flag,setFlag]=useState(false);
     if (flag){
       return(
-          <div >{viewTitle}:<input type={inputType} onChange={e=>setChangeContent(e.target.value)}/>
+          <div >エリア:<input type='text' onChange={e=>setChangeContent(e.target.value)}/>
               <button onClick={e=>{
                 if(changeContent ==''){
-                  alert(`入力が空になっています。\n※変更後の${viewTitle}を入力してください`)
+                  alert(`入力が空になっています。\n※変更後のエリアを入力してください`)
                 }else{
                   setFlag(!flag)
                   UpDateProject(id,title,changeContent)
                 }
               }}>変更</button>
               <button onClick={e=>{setFlag(!flag)}}>キャンセル</button>
+              <DeleteProject id={id}/>
           </div>
       )
   }else{
       return(
         <div>
-          <div onClick={e=>setFlag(!flag)}>{viewTitle}:{content}</div>
+          <div onClick={e=>setFlag(!flag)}>エリア:{content}</div>
+          <DeleteProject id={id}/>
         </div>
       )}
   }
