@@ -27,42 +27,65 @@ const OneProject:FC<{project:Project}>=({project})=>{
 
 
 const ListUpProject:FC<{projectList:Project[]}>=({projectList})=>{
+  // const FlagList=[true,true,true,true]
+
+
+
   const LUP=projectList.map((p)=>{
     return(
       <div key={p.id}>
         <OneProject project={p}/>
       </div>
     )})
+  // console.log('uuuuuuuuuuuuuu',CalenderFunction(projectList))
+  // console.log(projectList,'プロイジェクトリストです。、')
+
   return(
-    <div>{LUP}</div>
+    <div className='AllView'>
+      <div>
+        {LUP}
+      </div>
+      <Calender
+      ProjectList={projectList}
+      />
+    </div>
   )
 }
 
+// const CalenderFunction=(projectList:Project[])=>{
 
+//   const[DaysMatrix,setDaysMatrix]=useState<TestDayType[]>()
+//   const month  =0
+//   const year = dayjs().year()
+//   const firstDayOfTheMonth = dayjs(new Date(2022, 1, 1)).day();
+//   let currentMonthCount = 0 - firstDayOfTheMonth
 
-const CalenderFunction=()=>{
+  
+//   for (let i =0 ;i<40 ;i++){
+//     currentMonthCount++;
+//     // let daysmatrix
+//     const Day=String(new Date(year, month, currentMonthCount).getDate())
+//     const Month=String(new Date(year, month, currentMonthCount).getMonth()+1)
+//     const Year=String(new Date(year, month, currentMonthCount).getFullYear())
+    
+//     projectList.map((p)=>{
+//       console.log('p.startDate',p.startDate)
+//       console.log('カレンダーの日付',`${Year}-${Month}-${Day}`)
+//       if(p.startDate==`${Year}-${Month}-${Day}`){
+//         Days.push({year:Year,month:Month,day:Day,project:p.startDate})
+//         // console.log({year:Year,month:Month,day:Day,project:p.startDate})
+//         // return({year:Year,month:Month,day:Day,project:p.startDate})
+//       }else if(p.endDate==`${Year}-${Month}-${Day}`){
+//         Days.push({year:Year,month:Month,day:Day})
+//         // return({year:Year,month:Month,day:Day})
+//       }
+//     })
+//     let Days:any[]
+//   }
+//   setDaysMatrix(Days)
 
-
-const month  =0
-const year = dayjs().year()
-const firstDayOfTheMonth = dayjs(new Date(2022, 1, 1)).day();
-let currentMonthCount = 0 - firstDayOfTheMonth
-const DaysMatrix = new Array(40).fill([]).map(() => {
-    currentMonthCount++;
-    const Day=String(new Date(year, month, currentMonthCount).getDate())
-    const Month=String(new Date(year, month, currentMonthCount).getMonth()+1)
-    const Year=String(new Date(year, month, currentMonthCount).getFullYear())
-
-
-    return{year:Year,month:Month,day:Day}
-
-    // return `${Year}年${Month}月${day}日`;
-
-});
-
-
-  return(DaysMatrix)
-}
+//   return(DaysMatrix)
+// }
 
 
 
@@ -80,10 +103,10 @@ export const ViewComponent=()=>{
       getProject();
     },[])
       return(
-        <div className='AllView'>
-          <Calender/>
+        <div >
+  
           <div className='TaskInfo'>
-          <ListUpProject projectList={viewProject}/>
+            <ListUpProject projectList={viewProject}/>
           </div>
         </div>
     )

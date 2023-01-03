@@ -2,57 +2,112 @@ import React,{FC,useState} from 'react';
 import { Router } from 'react-router-dom';
 import './App.css';
 import dayjs from "dayjs";
+import {Project} from './DifinitionType'
 
 export interface TypeOfDate {
     year:string,
     month:string,
     day:string,
 }
-export const Calender=()=>{
+
+export const ViewDay:FC<{DayList:string[],FlagList:boolean[]}>=(DayList)=>{
+    // console.log(DayList.FlagList)
+    let content:string
+
+    
+    const View2=DayList.FlagList.map((f)=>{
+        if (f){
+            content='●'
+        }else{
+            content='○'
+        }
+        return(
+            <div>{content}</div>
+        )
+    })
 
 
-    const month  =0
-  const year = dayjs().year()
-  const firstDayOfTheMonth = dayjs(new Date(2022, 1, 1)).day();
-  console.log('firstDayOfTheMonth',firstDayOfTheMonth)
-  let currentMonthCount = 0 - firstDayOfTheMonth
-  console.log('currentMonthCount',currentMonthCount)
-  const DaysMatrix = new Array(33).fill([]).map(() => {
-      currentMonthCount++;
-      const Day=String(new Date(year, month, currentMonthCount).getDate())
-      const Month=String(new Date(year, month, currentMonthCount).getMonth()+1)
-      const Year=String(new Date(year, month, currentMonthCount).getFullYear())
-      return{year:Year,month:Month,day:Day}
-    //   return `${Year}年${Month}月${Day}日`;
+    const View1 = DayList.DayList.map((d)=>{
+            return (
+                <div key={`${d}`}>
+                    {d}ここに出力します。
+                    <div>{View2}</div>
+                </div>
+            )
+    })
 
-  });
-//   console.log('dayMatrix',DaysMatrix[1][1].getDate())
-  console.log('dayMatrix',DaysMatrix)
-  console.log(dayjs('2019-01-10 07:30:20').startOf('year').format());
-  console.log(dayjs('2019-01-10 07:30:20').endOf('d').format());
-  const WeekDay:FC<{daymatrix:TypeOfDate[]}>=({daymatrix})=>{
-      const view=daymatrix.map((d:TypeOfDate)=>{
-      return(
-          <div className={`M${d.month} D${d.day}`}>
-              <div>{d.month}月</div>
-              <div>{d.day}日</div>
-              
-          </div>
-      )
-      })
-    return(
-      <div className='calender'>
-        {view}
-      </div>
-    )
-  }
     return(
         <div>
-            <WeekDay
-                daymatrix={DaysMatrix}
-            />
-            {/* {DaysMatrix[1]} */}
-            カレンダー出力
+            {View1}
+        </div>
+    )
+}
+
+
+const TaskDoInfo=(d:string,flag:boolean,ProjectList:Project[])=>ProjectList.map((p)=>{
+    flag=false
+    if (p.startDate==d){
+        flag=true
+    }else if (p.endDate==d){
+        console.log('falseに入りました')
+        console.log(d)
+        flag=true
+    }
+    console.log('Iiiiiiiii',flag,d)
+    return({id:p.id,flag:flag})
+})
+
+const ViewProjectStateByDay:FC<{TaskDoInfo:{id:string,flag:boolean}[]}>=(props)=>{
+    console.log('taskdoinfo野中み',props.TaskDoInfo)
+    console.log('day')
+    let check=''
+    const view =props.TaskDoInfo.map((t)=>{
+        console.log('uuuuuuuu',t.flag)
+        if(t.flag){
+            check='○'
+        }else{
+            check='×'
+        }
+        return(
+            <div key={`${t.id}`}>
+                {check}
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                _____________________
+
+            </div>
+        )
+    })
+    console.log(props.TaskDoInfo)
+    return(
+        <div>
+            {view}
+        </div>
+    )
+}
+
+
+export const Calender:FC<{ProjectList:Project[]}>=(props)=>{
+    const DayList=['2023-01-01','2023-01-02','2023-01-03','2023-01-04','2023-01-05','2023-01-06',]
+
+    const DayRoller=DayList.map((d)=>{
+        return(
+            <div>
+                {d}
+                <ViewProjectStateByDay
+                    TaskDoInfo={TaskDoInfo(d,false,props.ProjectList)}
+                />
+ 
+            </div>
+        )
+    })
+
+    return(
+        <div className='ViewCalender'>
+            {DayRoller}
         </div>
     )
 }

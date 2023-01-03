@@ -34,17 +34,20 @@
 
 .AllView{
   border : solid 1px #333 ;
+  display: flex;
 
 }
 
+.ViewCalender{
+  display: flex;
+}
 
 .TaskInfo{
   display: flex;
   margin-left: 0px;
-  padding-right: 0px;
-  border : solid 1px #333 ;
-
-  
+  padding-left: 0px;
+  /* padding-right: 0px; */
+  border : solid 1px #333 ; 
 }
 
 .calender{
@@ -56,15 +59,15 @@
   
 }
 
-.M1{
+/* .M1{
   margin-top: 100px;
   border : solid 1px #333 ;
-}
+} */
 
-.D12{
+/* .D12{
   margin-top: 200px;
   border : solid 1px #333 ;
-}
+} */
 
 
 @keyframes App-logo-spin {
