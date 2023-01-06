@@ -1,90 +1,187 @@
+import { endianness } from "os";
+import {
+  useState,
+  useEffect,
+  FC,
+  createContext,
+  useContext,
+  useReducer,
+} from "react";
 // import './App.css';
-import React from 'react';
-import {useState,useEffect,FC} from 'react';
-import axios from 'axios';
-import {Gantt} from './Gantt'
-import {Project} from '../DifinitionType'
-import {ProjectHeader} from './OneProjectView'
-import dayjs from "dayjs";
+import axios from "axios";
+import { Project, Task } from "../DefinitionType";
+import { ProjectHeader, DeleteProject } from "./OneProjectView";
+import { Calender } from "../Calender";
+import dayjs, { Dayjs } from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+import { isConstructorDeclaration } from "typescript";
+import { create } from "domain";
+import { ViewTaskList } from "./ViewTask";
+import { setFlagsFromString } from "v8";
+dayjs.extend(isBetween);
 
+// *1
+export const ChangeProjectTerm = (
+  target: string,
+  beforeChangeDay: string,
+  setBeforeChangeDay: React.Dispatch<React.SetStateAction<string>>,
+  afterChangeDay: string,
+  setAfterChangeDay: React.Dispatch<React.SetStateAction<string>>,
+  isChangeMode: boolean,
+  setIsChangeMode: React.Dispatch<React.SetStateAction<boolean>>,
+  day: string,
+  project: Project
+) => {
+  console.log("ddddddddddddddd", target);
+  if (!isChangeMode) {
+    setBeforeChangeDay(target);
+    setIsChangeMode(true);
+    console.log("trueに入ってます");
+  } else {
+    console.log("falseに入ってます");
+    setAfterChangeDay(day);
 
+    axios
+      .post("http://127.0.0.1:8000/project/update", {
+        id: project.id,
+        afterChangeDay: day,
+        target: target,
+        field: project.field,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
 
-const Header=()=>{
-  const DayList=[...Array(30)].map((_, i) => dayjs().add(i, 'd').format("YYYY-MM-DD")) 
-  const ViewDay=DayList.map((d)=>{
-    return(
+    setIsChangeMode(false);
+  }
+};
+
+export const ViewProject: FC<{
+  day: string;
+  project: Project;
+  beforeChangeDay: string;
+  setBeforeChangeDay: React.Dispatch<React.SetStateAction<string>>;
+  afterChangeDay: string;
+  setAfterChangeDay: React.Dispatch<React.SetStateAction<string>>;
+  isChangeMode: boolean;
+  setIsChangeMode: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({
+  day,
+  project,
+  beforeChangeDay,
+  setBeforeChangeDay,
+  afterChangeDay,
+  setAfterChangeDay,
+  isChangeMode,
+  setIsChangeMode,
+}) => {
+  // console.log('ischaneMode:',isChangeMode)
+  const IsOnTerm = (day: string, start: string, end: string) => {
+    let flag: boolean;
+    let content: string;
+    let func: () => void;
+    if (dayjs(day).isBetween(start, end, null, "()")) {
+      flag = true;
+      content = "●";
+      func = () => {
+        console.log("on term");
+        if (isChangeMode) {
+          console.log("ddddddddddddddddddddddddddd");
+          setAfterChangeDay(day);
+          // const target='start'
+          axios
+            .post("http://127.0.0.1:8000/project/update", {
+              id: project.id,
+              afterChangeDay: day,
+              target: beforeChangeDay,
+            })
+            .then((res) => {
+              console.log(res.data);
+            });
+        }
+      };
+    } else if (day === start) {
+      flag = true;
+      content = "☆";
+      func = () => {
+        console.log("start");
+
+        ChangeProjectTerm(
+          "start",
+          beforeChangeDay,
+          setBeforeChangeDay,
+          afterChangeDay,
+          setAfterChangeDay,
+          isChangeMode,
+          setIsChangeMode,
+          day,
+          project
+        );
+      };
+    } else if (day === end) {
+      flag = true;
+      content = "☆";
+      func = () => {
+        console.log("end");
+        ChangeProjectTerm(
+          "end",
+          beforeChangeDay,
+          setBeforeChangeDay,
+          afterChangeDay,
+          setAfterChangeDay,
+          isChangeMode,
+          setIsChangeMode,
+          day,
+          project
+        );
+      };
+    } else {
+      flag = false;
+      content = "○";
+      func = () => {
+        console.log("else");
+        if (isChangeMode) {
+          setAfterChangeDay(day);
+          axios
+            .post("http://127.0.0.1:8000/project/update", {
+              id: project.id,
+              afterChangeDay: day,
+              target: beforeChangeDay,
+            })
+            .then((res) => {
+              console.log(res.data);
+            });
+        }
+      };
+    }
+    return { flag: flag, content: content, func: func };
+  };
+  const flag = IsOnTerm(day, project.startDate, project.endDate).flag;
+  const content = IsOnTerm(day, project.startDate, project.endDate).content;
+  const func = IsOnTerm(day, project.startDate, project.endDate).func;
+  // console.log('target',target)
+  let task: any;
+  if (flag) {
+    task = (
       <div>
-        {/* <div className='AllView'> */}
-          <div className='day'>
-            <div>
-            {d}
-            </div>
-          </div>
-        {/* </div> */}
+        <ViewTaskList project={project} day={day} />
       </div>
-    )
-  })
-  return(
-    <div className='ALlView debug'>
-      <div className='Navbar'>
-        日付 +
-      </div>
-      <div>
-      <div className='AllView'>
-        {ViewDay}
-        </div>
+    );
+  }
+
+  return (
+    <div>
+      <div
+        className={flag ? "Istrue" : ""}
+        onClick={(e) => {
+          // *1
+          func();
+          // ChangeProjectTerm(beforeChangeDay,setBeforeChangeDay,afterChangeDay,setAfterChangeDay,isChangeMode,setIsChangeMode,day,project)
+        }}
+      >
+        {content}
+        {task}
       </div>
     </div>
-  )
-}
-
-const OneProject:FC<{project:Project}>=({project})=>{
-  const DayList=[...Array(30)].map((_, i) => dayjs().add(i, 'd').format("YYYY-MM-DD")) 
-  return(
-    <div className='AllView'>
-      <div className='Navbar'>
-        <ProjectHeader id={project.id} title='name' content={project.name} />
-      </div>
-      <div>
-        <Gantt project={project} DayList={DayList}/>
-      </div>
-    </div>
-  )
-}
-
-const ViewProjectList:FC<{projectList:Project[]}>=({projectList})=>{
-
-  const LUP=projectList.map((p)=>{
-    return(
-      <div key={p.id}>
-        <OneProject project={p}/>
-      </div>
-    )})
-  return(
-    <div className='AllView'>
-      <div>{LUP}</div>
-    </div>
-  )
-}
-
-
-export const ViewCalender=()=>{
-  const [viewProject,setViewProject]=useState<Project[]>([{id:'',name:'',startDate:'',endDate:'',task:[{parentId:'',id:'',task:'',date:''}]}])
-  const getProject=async()=>{
-    // const UserCount = createContext(false);
-  await axios.get('http://127.0.0.1:8000/project/get')
-  .then(res=>{
-    setViewProject(res.data);
-  })
-}
-    useEffect(()=>{
-      getProject();
-    },[])
-      return(
-        <div className='TaskInfo'>
-            <Header/>
-            <ViewProjectList projectList={viewProject}/>
-        </div>
-    )
-    
-}
+  );
+};

@@ -28,59 +28,53 @@
   color: #61dafb;
 }
 
-.day{
-
+.day {
 }
 
-.AllView{
-  border : solid 1px #333 ;
-  display: flex;
-
-}
-
-.ViewCalender{
+.AllView {
+  border: solid 1px #333;
   display: flex;
 }
 
-
-.debug{
-  border : solid 1px aquamarine; 
+.ViewCalender {
   display: flex;
 }
 
-.Navbar{
-  width:200px;
+.debug {
+  border: solid 1px aquamarine;
+  display: flex;
+}
+
+.Navbar {
+  width: 200px;
   position: sticky;
   left: 0;
   opacity: 1;
-  background-color:white;
+  background-color: white;
 }
 
-.TaskInfo{
+.TaskInfo {
   /* display: flex; */
   margin-left: 0px;
   padding-left: 0px;
   /* padding-right: 0px; */
-  border : solid 1px #333 ; 
+  border: solid 1px #333;
 }
 
-.Istrue{
+.Istrue {
   background-color: aquamarine;
 }
 
-
-
-.day{
+.day {
   width: 50px;
 }
 
-.calender{
+.calender {
   display: flex;
   /* margin-top: 100px; */
   margin-left: 200px;
-  border : solid 1px #333 ;
+  border: solid 1px #333;
   /* border:solid, #282c34,2px; */
-  
 }
 
 /* .M1{
@@ -93,7 +87,6 @@
   border : solid 1px #333 ;
 } */
 
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -102,5 +95,3 @@
     transform: rotate(360deg);
   }
 }
-
-

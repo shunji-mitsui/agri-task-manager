@@ -1,19 +1,16 @@
-import React from 'react';
-import './App.css';
-import {ViewCalender} from './ProjectComponent/ViewProject'
-import {CreateProject} from './ProjectComponent/CreateProject'
+import React from "react";
+import "./App.css";
+import { ViewCalender } from "./ProjectComponent/ViewCalender";
+import { CreateProject } from "./ProjectComponent/CreateProject";
 import dayjs from "dayjs";
 
-
 function App() {
-  // const month  =dayjs().month()
-  
   return (
     <div className="App">
-      
-      <CreateProject/>  
-      <ViewCalender/>
-      
+      {/* <CreateProject/>   */}
+      <div>BeForm</div>
+      <div>ガントチャート</div>
+      <ViewCalender />
     </div>
   );
 }
