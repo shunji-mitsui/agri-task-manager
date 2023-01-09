@@ -26,6 +26,10 @@
   background-color: #333;
 }
 
+.selected{
+  background-color: #333;
+}
+
 .ButtonForPageChange{
   padding-left: 100px;
 }

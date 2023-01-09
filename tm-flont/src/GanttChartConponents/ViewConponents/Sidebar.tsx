@@ -3,7 +3,7 @@ import { ViewGanttBar } from "./GanttBar";
 import { Project } from "../../DefinitionType";
 import { deleteProject } from "../FunctionComponents/FunctionForProject";
 import dayjs from "dayjs";
-import { AddForm } from "./AddForm";
+// import { AddForm } from "./AddForm";
 // import { DeleteProjectButton } from "./DeleteButton";
 
 export const ProjectContent: FC<{
@@ -36,8 +36,8 @@ export const ProjectSidebar: FC<{ project: Project[] }> = ({ project }) => {
         <div className="AllView">
           <div className="SideBar">
             <ProjectContent id={p.id} content={p.name} />
-            <button onClick={(e) => setFlag(!flag)}>追加</button>
-            <AddForm field={p.field} flag={flag} setFlag={setFlag} />
+            {/* <button onClick={(e) => setFlag(!flag)}>追加</button>
+            <AddForm field={p.field} flag={flag} setFlag={setFlag} /> */}
           </div>
           <div>
             {/* <ViewGanttBar project={p} DayList={DayList} flag={flag} /> */}

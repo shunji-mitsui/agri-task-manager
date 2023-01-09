@@ -4,7 +4,7 @@ import { Project } from "../../DefinitionType";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { Milestone } from "./Milestone";
-import { AddMilestone } from "./Milestone";
+import { AddForm} from "./Milestone";
 import { FlagContext, GanttBarContext } from "../FunctionComponents/UseContext";
 dayjs.extend(isBetween);
 
@@ -50,11 +50,8 @@ const ViewCalender: FC<{
         }}
       >
         <FlagContext.Provider value={{ onTerm, setOnTerm }}>
-          {/* <div className={flag ? "" : "display-none"}>
-            <AddMilestone day={d} />
-          </div> */}
+          
           <div>
-
           <Milestone project={p} day={d} /><br/>
           </div>
         </FlagContext.Provider>
@@ -77,6 +74,7 @@ export const ViewGanttBar: FC<{
     const ViewDay = DayList.map((d) => {
       return (
         <div>
+          
           <ViewCalender
             isChangeMode={isChangeMode}
             setIsChangeMode={setIsChangeMode}
