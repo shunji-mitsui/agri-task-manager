@@ -1,38 +1,36 @@
 .App {
   text-align: center;
+  position: fixed;
+  /* position:sticky;
+  top: auto;
+  left: auto; */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.Main{
+  position: relative;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.color1 {
+  background-color: white;
+}
+.color2 {
+  background-color: blue;
+}
+.color1 {
+  background-color: pink;
+}
+.color1 {
+  background-color: red;
+}
+.color1 {
+  background-color: #333;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-.day {
+.ButtonForPageChange{
+  padding-left: 100px;
 }
 
 .AllView {
-  border: solid 1px #333;
   display: flex;
 }
 
@@ -40,17 +38,29 @@
   display: flex;
 }
 
-.debug {
-  border: solid 1px aquamarine;
-  display: flex;
-}
-
-.Navbar {
+.SideBar {
   width: 200px;
   position: sticky;
   left: 0;
-  opacity: 1;
+  opacity: 0.9;
   background-color: white;
+}
+
+.GanttChart{
+  padding-top: 30px;
+}
+
+.GanttBar {
+  display: flex;
+}
+
+.Calender {
+  display: flex;
+  margin-left: 200px;
+}
+
+.display-none {
+  display: none;
 }
 
 .TaskInfo {
@@ -58,7 +68,6 @@
   margin-left: 0px;
   padding-left: 0px;
   /* padding-right: 0px; */
-  border: solid 1px #333;
 }
 
 .Istrue {
@@ -66,32 +75,14 @@
 }
 
 .day {
+  border: solid 1px #333;
   width: 50px;
 }
-
+.board-element {
+  width: 200px;
+}
+/* 
 .calender {
-  display: flex;
-  /* margin-top: 100px; */
-  margin-left: 200px;
-  border: solid 1px #333;
-  /* border:solid, #282c34,2px; */
-}
-
-/* .M1{
-  margin-top: 100px;
-  border : solid 1px #333 ;
-} */
-
-/* .D12{
-  margin-top: 200px;
-  border : solid 1px #333 ;
-} */
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+  /* border: solid 1px #333; */
+/* margin-top: 100px; */
+/* border:solid, #282c34,2px; */
