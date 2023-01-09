@@ -11,38 +11,36 @@ import {
 // import './App.css';
 import axios from "axios";
 import { FProject, Project } from "../../DefinitionType";
-import { GanttBarContext, FlagContext } from "./UseContext";
+import { GanttBarContext, FlagContext, RenderContext } from "./UseContext";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 
-
-export const postProject = (
-  item: string,
-  field: string,
-  start: string,
-  end: string,
-  f: boolean,
-  setF: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  axios
-    .post("http://127.0.0.1:8000/project", {
-      item: item,
-      field: field,
-      start: start,
-      end: end,
-    })
-    .then((res) => {
-      console.log(res.data);
-      if (res.data.status == 100) {
-        alert("その期間は予定が入っています");
-      } else if (res.data.status == 101) {
-        alert("開始日が終了日よりも後になっています。");
-      }
-    });
-  setF(!f);
-};
-
+// const postProject = (
+//   item: string,
+//   field: string,
+//   start: string,
+//   end: string,
+//   f: boolean,
+//   setF: React.Dispatch<React.SetStateAction<boolean>>
+// ) => {
+//   axios
+//     .post("http://127.0.0.1:8000/project", {
+//       item: item,
+//       field: field,
+//       start: start,
+//       end: end,
+//     })
+//     .then((res) => {
+//       console.log(res.data);
+//       if (res.data.status == 100) {
+//         alert("その期間は予定が入っています");
+//       } else if (res.data.status == 101) {
+//         alert("開始日が終了日よりも後になっています。");
+//       }
+//     });
+//   setF(!f);
+// };
 
 export const getProject = async (
   setViewProject: (value: React.SetStateAction<FProject[]>) => void
@@ -52,20 +50,19 @@ export const getProject = async (
   });
 };
 
-
-
-
-export const deleteProject = async (id:string) => {
+export const deleteProject = async (id: string) => {
+  
   await axios
     .post("http://127.0.0.1:8000/project/delete", {
       id: id,
     })
     .then((res) => {
       console.log(res.data);
+      // setRender(!render)
     });
 };
 
-export const UpDateProject = (id: string, item: string) => {
+const UpDateProject = (id: string, item: string) => {
   axios
     .post("http://127.0.0.1:8000/project/update", {
       id: id,
@@ -82,8 +79,13 @@ export const UpDateProject = (id: string, item: string) => {
     });
 };
 
-
-export const updateProjectDate = (project: Project, target: string, Day: string) => {
+export const updateProjectDate = (
+  project: Project,
+  target: string,
+  Day: string,
+  render: boolean,
+  setRender: (value: boolean) => void,
+) => {
   axios
     .post("http://127.0.0.1:8000/project/update", {
       id: project.id,
@@ -91,20 +93,22 @@ export const updateProjectDate = (project: Project, target: string, Day: string)
       target: target,
     })
     .then((res) => {
+      if (res.data.status == 100) {
+        alert("その期間は別の予定が入っています。");
+      } else if (res.data.status == 101) {
+        alert("開始日が終了日よりも後になっています。");
+      }
+      setRender(!render)
       console.log(res.data);
     });
 };
 
-
-
-
-export const IsOnTerm = (project: Project, day: string) => {
+export const IsOnTerm = (project: Project, day: string,render:boolean,setRender: (value: boolean) => void) => {
   // let flag: boolean;
   const start = project.startDate;
   const end = project.endDate;
   const { onTerm, setOnTerm } = useContext(FlagContext);
   const { target, setTarget } = useContext(GanttBarContext);
-  const { afterDay, setAfterDay } = useContext(GanttBarContext);
   const { isChangeMode, setIsChangeMode } = useContext(GanttBarContext);
   let content: string;
   let func: () => void;
@@ -114,7 +118,7 @@ export const IsOnTerm = (project: Project, day: string) => {
     func = () => {
       if (isChangeMode) {
         // setAfterDay(day);
-        updateProjectDate(project, target, day);
+        updateProjectDate(project, target, day, render, setRender);
         setIsChangeMode(!isChangeMode);
       }
     };
@@ -123,7 +127,7 @@ export const IsOnTerm = (project: Project, day: string) => {
     content = "☆";
     func = () => {
       if (isChangeMode) {
-        updateProjectDate(project, target, day);
+        updateProjectDate(project, target, day, render, setRender);
       } else {
         setTarget("start");
         console.log(target);
@@ -136,7 +140,7 @@ export const IsOnTerm = (project: Project, day: string) => {
     content = "＊";
     func = () => {
       if (isChangeMode) {
-        updateProjectDate(project, target, day);
+        updateProjectDate(project, target, day, render, setRender);
       } else {
         setTarget("end");
         console.log(target);
@@ -149,7 +153,7 @@ export const IsOnTerm = (project: Project, day: string) => {
     content = "○";
     func = () => {
       if (isChangeMode) {
-        updateProjectDate(project, target, day);
+        updateProjectDate(project, target, day, render, setRender);
         setIsChangeMode(!isChangeMode);
       }
     };

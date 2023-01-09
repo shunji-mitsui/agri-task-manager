@@ -12,6 +12,26 @@ type FlagContextType = {
   onTerm: boolean;
 };
 
+type RenderContextType = {
+  setRender: (value: boolean) => void;
+  render: boolean;
+};
+
+export const RenderContext = createContext<RenderContextType>(
+  {} as RenderContextType
+);
+
+export const RenderProvider: FC<Children> = ({ children }) => {
+  const [render, setRender] = useState<boolean>(true);
+  return (
+    <div>
+      <RenderContext.Provider value={{ render, setRender }}>
+        {children}
+      </RenderContext.Provider>
+    </div>
+  );
+};
+
 export const FlagContext = createContext<FlagContextType>(
   {} as FlagContextType
 );

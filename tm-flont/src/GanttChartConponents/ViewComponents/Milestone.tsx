@@ -12,8 +12,8 @@ import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 dayjs.extend(isBetween);
 import { ViewTaskList } from "./ViewTask";
-import { GanttBarContext } from "../FunctionComponents/UseContext";
-import { IsOnTerm } from "../FunctionComponents/FunctionForProject";
+import { RenderContext } from "../FunctionsForGanttChart/UseContext";
+import { IsOnTerm } from "../FunctionsForGanttChart/FunctionForProject";
 import { setSelectionRange } from "@testing-library/user-event/dist/utils";
 
 export const AddMileStone: FC<{
@@ -24,7 +24,8 @@ export const AddMileStone: FC<{
   setSelectedFlag: React.Dispatch<React.SetStateAction<boolean>>;
   field: string;
 }> = ({ day, select, setSelect, field }) => {
-  const [selectedFlag,setSelectedFlag]=useState(false)
+  const [selectedFlag, setSelectedFlag] = useState(false);
+  const { render, setRender } = useContext(RenderContext);
   return (
     <div className={selectedFlag ? "selected day" : "day"}>
       <div
@@ -32,36 +33,37 @@ export const AddMileStone: FC<{
           if (!select[0]) {
             const selectDay = [day];
             setSelect(selectDay);
-            setSelectedFlag(true)
+            setSelectedFlag(true);
           } else {
             // const firstSelect = select[0];
-            setSelectedFlag(true)
+            setSelectedFlag(true);
             const selectDays = select;
             selectDays.push(day);
             setSelect(selectDays);
             const item = window.prompt("野菜を入力");
             if (item) {
               axios
-              .post("http://127.0.0.1:8000/project", {
-                start: select[0],
-                end: select[1],
-                item: item,
-                field: field,
-              })
+                .post("http://127.0.0.1:8000/project", {
+                  start: select[0],
+                  end: select[1],
+                  item: item,
+                  field: field,
+                })
                 .then((res) => {
-                  if (res.data.status==100){
-                    alert('同一エリア内での期間が重複しています。')
+                  if (res.data.status == 100) {
+                    alert("同一エリア内での期間が重複しています。");
                   }
-                  console.log(res.data)
+                  setRender(!render);
+                  console.log(res.data);
                   setSelect([""]);
                 });
-              }else{
-                setSelect([""]);
-              }
-              setSelectedFlag(false)
+            } else {
+              setSelect([""]);
             }
-          }}
-          >
+            setSelectedFlag(false);
+          }
+        }}
+      >
         -
       </div>
     </div>
@@ -90,38 +92,18 @@ export const AddForm: FC<{ DayList: string[]; field: string }> = ({
       </div>
     );
   });
-  return (
-    // <div
-    //   onClick={(e) => {
-    //     if (isCreateMode) {
-    //       setTarget("○");
-    //       setIsCreateMode(!isCreateMode);
-    //       const projectName = window.prompt(
-    //         "プロジェクト名を入力してください",
-    //         ""
-    //       );
-    //     } else {
-    //       setTarget("○");
-    //       setIsCreateMode(!isCreateMode);
-    //     }
-    //   }}
-    // >
-    //   {target}
-    // </div>
-    <div className="AllView">{ViewAddForm}</div>
-  );
+  return <div className="AllView">{ViewAddForm}</div>;
 };
 
 export const Milestone: FC<{
   day: string;
   project: Project;
 }> = ({ day, project }) => {
-  const useFlag = IsOnTerm(project, day).flag;
-  const content = IsOnTerm(project, day).content;
-  // console.log('マイルストーン作成1',project.name)
-  const func = IsOnTerm(project, day).func;
-  const target = IsOnTerm(project, day).target;
-  // console.log('マイルストーン作成1',content)
+  const { render, setRender } = useContext(RenderContext);
+  const useFlag = IsOnTerm(project, day, render, setRender).flag;
+  const content = IsOnTerm(project, day, render, setRender).content;
+  const func = IsOnTerm(project, day, render, setRender).func;
+  const target = IsOnTerm(project, day, render, setRender).target;
   let task: any;
   if (useFlag) {
     task = (
@@ -132,7 +114,6 @@ export const Milestone: FC<{
   }
   return (
     <div>
-      {target}
       <div
         className={useFlag ? "Istrue" : ""}
         onClick={(e) => {

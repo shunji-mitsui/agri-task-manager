@@ -1,18 +1,19 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, createContext, FC } from "react";
 import { FProject, Project } from "../../DefinitionType";
-import { getProject } from "../FunctionComponents/FunctionForProject";
+import { getProject } from "../FunctionsForGanttChart/FunctionForProject";
 import { Headline_GanttChart } from "./HeadLine";
 import { ProjectSidebar } from "./Sidebar";
 import { ViewGanttBar } from "./GanttBar";
 import dayjs from "dayjs";
 import { AddForm } from "./Milestone";
+import { RenderContext } from "../FunctionsForGanttChart/UseContext";
 
-const ViewProjectByField:FC<{project:FProject}>=({project})=>{
+const ViewProjectByField: FC<{ project: FProject }> = ({ project }) => {
   const [DayList, setDayList] = useState(
     [...Array(60)].map((_, i) => dayjs().add(i, "d").format("YYYY-MM-DD"))
   );
   const [flag, setFlag] = useState(false);
-  return(
+  return (
     <div>
       <div className="GanttBar">
         <div className="SideBar AllView">
@@ -22,23 +23,27 @@ const ViewProjectByField:FC<{project:FProject}>=({project})=>{
         </div>
         <div>
           <div className={flag ? "" : "display-none"}>
-            <AddForm DayList={DayList} field={project.field}/>
+            <AddForm DayList={DayList} field={project.field} />
           </div>
-          <ViewGanttBar project={project.project} DayList={DayList} flag={flag} />
+          <ViewGanttBar
+            project={project.project}
+            DayList={DayList}
+            flag={flag}
+          />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 const Main_Ganttchart: FC<{ projectList: FProject[] }> = ({ projectList }) => {
-  console.log(projectList,'iiiiiiiiiiiii')
+  console.log(projectList, "iiiiiiiiiiiii");
   const ViewField = projectList.map((p) => {
     // console.log(p.project,'uuuuuuuuuuiui')
     // const [addflag,setAddflag]=useState(false)
     return (
       <div>
-        <ViewProjectByField project={p}/>
+        <ViewProjectByField project={p} />
       </div>
     );
   });
@@ -48,7 +53,8 @@ const Main_Ganttchart: FC<{ projectList: FProject[] }> = ({ projectList }) => {
 // ProjectSidebar;
 
 export const ViewGanttChart = () => {
-  const [renderFlag, setRenderFlag] = useState(false);
+  const [render, setRender] = useState(false);
+  // const [renderFlag, setRenderFlag] = useState(false);
   const [viewProject, setViewProject] = useState<FProject[]>([
     {
       field: "",
@@ -66,19 +72,13 @@ export const ViewGanttChart = () => {
   ]);
   useEffect(() => {
     getProject(setViewProject);
-  }, [renderFlag]);
+  }, [render]);
   return (
-    <div className='GanttChart'>
-      <button
-        onClick={(e) => {
-          setRenderFlag(!renderFlag);
-        }}
-        className="SideBar"
-      >
-        更新
-      </button>
-      <Headline_GanttChart />
-      <Main_Ganttchart projectList={viewProject} />
+    <div className="GanttChart">
+      <RenderContext.Provider value={{ render, setRender }}>
+        <Headline_GanttChart />
+        <Main_Ganttchart projectList={viewProject} />
+      </RenderContext.Provider>
     </div>
   );
 };

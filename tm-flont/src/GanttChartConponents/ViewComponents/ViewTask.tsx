@@ -6,7 +6,7 @@ import isBetween from "dayjs/plugin/isBetween";
 import {
   deleteTask,
   createTask,
-} from "../FunctionComponents/FunctionForTask";
+} from "../FunctionsForGanttChart/FunctionForTask";
 dayjs.extend(isBetween);
 
 const ViewTask: FC<{

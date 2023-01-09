@@ -4,8 +4,11 @@ import { Project } from "../../DefinitionType";
 import dayjs from "dayjs";
 import isBetween from "dayjs/plugin/isBetween";
 import { Milestone } from "./Milestone";
-import { AddForm} from "./Milestone";
-import { FlagContext, GanttBarContext } from "../FunctionComponents/UseContext";
+import { AddForm } from "./Milestone";
+import {
+  FlagContext,
+  GanttBarContext,
+} from "../FunctionsForGanttChart/UseContext";
 dayjs.extend(isBetween);
 
 const ViewCalender: FC<{
@@ -33,29 +36,29 @@ const ViewCalender: FC<{
   p,
   d,
 }) => {
+  const [onTerm, setOnTerm] = useState(false);
   // console.log('(カレンダー作成コンポーネント',p)
-  const [onTerm, setOnTerm] = useState<boolean>(true);
   return (
     <div className="day">
-      <GanttBarContext.Provider
-        value={{
-          isChangeMode,
-          setIsChangeMode,
-          isCreateMode,
-          setIsCreateMode,
-          target,
-          setTarget,
-          afterDay,
-          setAfterDay,
-        }}
-      >
-        <FlagContext.Provider value={{ onTerm, setOnTerm }}>
-          
+      <FlagContext.Provider value={{ onTerm, setOnTerm }}>
+        <GanttBarContext.Provider
+          value={{
+            isChangeMode,
+            setIsChangeMode,
+            isCreateMode,
+            setIsCreateMode,
+            target,
+            setTarget,
+            afterDay,
+            setAfterDay,
+          }}
+        >
           <div>
-          <Milestone project={p} day={d} /><br/>
+            <Milestone project={p} day={d} />
+            <br />
           </div>
-        </FlagContext.Provider>
-      </GanttBarContext.Provider>
+        </GanttBarContext.Provider>
+      </FlagContext.Provider>
     </div>
   );
 };
@@ -74,7 +77,6 @@ export const ViewGanttBar: FC<{
     const ViewDay = DayList.map((d) => {
       return (
         <div>
-          
           <ViewCalender
             isChangeMode={isChangeMode}
             setIsChangeMode={setIsChangeMode}

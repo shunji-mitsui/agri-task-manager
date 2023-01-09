@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ViewGanttChart } from "./GanttChartConponents/ViewConponents/GanttChart";
+import { ViewGanttChart } from "./GanttChartConponents/ViewComponents/GanttChart";
 import { Dashboard } from "./MapComponents/ViewMap";
 
 const root = ReactDOM.createRoot(

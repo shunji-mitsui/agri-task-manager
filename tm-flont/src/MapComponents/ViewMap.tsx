@@ -2,7 +2,7 @@ import { useState, useEffect, createContext, useContext, FC } from "react";
 import axios from "axios";
 // import { RuleTester } from "eslint";
 // import {createTask} from '../TaskFunctions/CreateTask'
-import { deleteTask } from "../GanttChartConponents/FunctionComponents/FunctionForTask";
+// import { deleteTask } from "../GanttChartConponents/FunctionsForGanttChart/FunctionForTask";
 
 interface Area {
   isUsing: boolean;
@@ -37,7 +37,7 @@ const ViewToDo: FC<{ toDo: ToDo[] }> = ({ toDo }) => {
           <br />
           <button
             onClick={(e) => {
-              deleteTask({ task: c.task, id: c.id });
+              // deleteTask({ task: c.task, id: c.id });
             }}
           >
             完了
