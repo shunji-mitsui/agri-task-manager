@@ -1,22 +1,22 @@
 import React, { useContext } from 'react';
 
 import axios from 'axios';
-import { FProject, Project } from '../../DefinitionType';
+import { Project } from '../../DefinitionType';
 import { GanttBarContext, FlagContext } from './UseContext';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 dayjs.extend(isBetween);
 
-export const getProject = async (
-  setViewProject: (value: React.SetStateAction<FProject[]>) => void,
+export const getProject = (
+  setViewProject: (value: React.SetStateAction<Project[]>) => void,
 ) => {
-  await axios.get('http://127.0.0.1:8000/project/get').then((res) => {
+  axios.get('http://127.0.0.1:8000/project/get').then((res) => {
     setViewProject(res.data);
   });
 };
 
-export const deleteProject = async (id: string) => {
-  await axios
+export const deleteProject = (id: string) => {
+  axios
     .post('http://127.0.0.1:8000/project/delete', {
       id: id,
     })
@@ -76,7 +76,7 @@ export const IsOnTerm = (
     };
   } else if (day === start) {
     setOnTerm(true);
-    content = '☆';
+    content = '●';
     func = () => {
       if (isChangeMode) {
         updateProjectDate(project, target, day, render, setRender);
@@ -89,7 +89,7 @@ export const IsOnTerm = (
     };
   } else if (day === end) {
     setOnTerm(true);
-    content = '＊';
+    content = '●';
     func = () => {
       if (isChangeMode) {
         updateProjectDate(project, target, day, render, setRender);

@@ -11,15 +11,10 @@ const StyledDay = styled(Grid)(`
 const StyledSideBar = styled(Grid)(`
   width:136px;
 `);
-export const HeadlineGanttChart: FC<{
-  DayList: string[];
-  clickCount: number;
-  setClickCount: React.Dispatch<React.SetStateAction<number>>;
-}> = ({ DayList, clickCount, setClickCount }) => {
+
+export const HeadLineCalender: FC<{ DayList: string[] }> = ({ DayList }) => {
   const ViewDay = DayList.map((d, key) => {
     return (
-      // mapで最初のhtmlタグにはkeyを渡す必要がある。(一意にするため)
-      // そのためにmap関数の第２引数にkeyを受け取れるようにしてあげて
       <div key={key}>
         <StyledDay item>{d.slice(-2)}</StyledDay>
       </div>
@@ -32,13 +27,26 @@ export const HeadlineGanttChart: FC<{
       </div>
     );
   });
+
+  return (
+    <Grid>
+      <Grid container> {ViewMonth}</Grid>
+      <Grid container>{ViewDay}</Grid>
+    </Grid>
+  );
+};
+
+export const HeadlineGanttChart: FC<{
+  DayList: string[];
+  clickCount: number;
+  setClickCount: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ DayList, clickCount, setClickCount }) => {
   return (
     <Grid container>
       <StyledSideBar item>日付</StyledSideBar>
       <Button onClick={() => setClickCount(clickCount - 1)}>◁</Button>
       <Grid item>
-        <Grid container> {ViewMonth}</Grid>
-        <Grid container>{ViewDay}</Grid>
+        <HeadLineCalender DayList={DayList} />
       </Grid>
       <Button onClick={() => setClickCount(clickCount + 1)}>▷</Button>
     </Grid>

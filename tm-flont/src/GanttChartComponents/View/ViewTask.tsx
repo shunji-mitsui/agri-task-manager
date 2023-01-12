@@ -1,20 +1,20 @@
 import { FC } from 'react';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { Project } from '@/DefinitionType';
-import { createTask, deleteTask } from '../Function/Task';
+import { Task } from '@/DefinitionType';
+import { createTask, deleteTask } from '../Functions/Task';
 dayjs.extend(isBetween);
 
 const ViewTask: FC<{
-  project: Project;
   day: string;
   t: { task: string; id: string };
-}> = ({ project, day, t }) => {
+  parentId: string;
+}> = ({ day, t, parentId }) => {
   if (!t.task) {
     return (
       <div
         onClick={() => {
-          createTask(project, day);
+          createTask(parentId, day);
         }}
       >
         -
@@ -23,11 +23,11 @@ const ViewTask: FC<{
   }
   return (
     <div
-      onClick={(e) => {
+      onClick={() => {
         if (t.task != '-') {
           deleteTask(t);
         } else {
-          createTask(project, day);
+          createTask(parentId, day);
         }
       }}
     >
@@ -36,12 +36,13 @@ const ViewTask: FC<{
   );
 };
 
-export const ViewTaskList: FC<{ project: Project; day: string }> = ({
-  project,
-  day,
-}) => {
+const ViewTaskList: FC<{
+  taskList: Task[];
+  day: string;
+  parentId: string;
+}> = ({ taskList, day, parentId }) => {
   const TaskList = [{ id: '', task: '' }];
-  project.task.map((t) => {
+  taskList.map((t) => {
     if (t.date == day) {
       TaskList.push({ task: t.task, id: t.id });
     } else {
@@ -51,7 +52,7 @@ export const ViewTaskList: FC<{ project: Project; day: string }> = ({
   const View = TaskList.map((t, key) => {
     return (
       <div key={key}>
-        <ViewTask project={project} t={t} day={day} />
+        <ViewTask t={t} day={day} parentId={parentId} />
       </div>
     );
   });

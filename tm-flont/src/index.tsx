@@ -3,8 +3,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
-import { ViewGanttChart } from './GanttChartComponents/View/GanttChart';
 import { EditArea } from './GanttChartComponents/EditField/EditFieldArea';
+import { ViewGanttChart } from './GanttChartComponents/View/Templetes/GanttChart';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(

@@ -13,8 +13,3 @@ export interface Project {
   endDate: string;
   task: Task[];
 }
-
-export interface FProject {
-  field: string;
-  project: Project[];
-}

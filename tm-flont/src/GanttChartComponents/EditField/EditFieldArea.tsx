@@ -67,12 +67,6 @@ export const EditArea = () => {
       console.log(res.data);
     });
   }, []);
-  const [expanded, setExpanded] = useState<string | false>(false);
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
-
   const view = field.map((f, key) => {
     return (
       <Grid key={key} item direction="column">

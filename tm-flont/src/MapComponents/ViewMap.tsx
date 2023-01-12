@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
-import axios from 'axios';
+import { FC, useState } from 'react';
+// import axios from 'axios';
 
 interface ToDo {
   day: string;
@@ -43,21 +43,20 @@ const ViewToDo: FC<{ toDo: ToDo[] }> = ({ toDo }) => {
 export const Dashboard = () => {
   const [count, setCount] = useState(0);
 
-  const getTask = async () => {
-    const result = await axios.get('http://127.0.0.1:8000/task/get');
-    console.log(result.data, 'iiiiiiiiiiiiiiiiiiiii');
-    setToDo(result.data);
-  };
+  // const getTask = async () => {
+  //   const result = await axios.get('http://127.0.0.1:8000/task/get');
+  //   setToDo(result.data);
+  // };
 
-  useEffect(() => {
-    getTask();
-  }, []);
-  useEffect(() => {
-    getTask();
-  }, [count]);
-  const [toDo, setToDo] = useState<ToDo[]>([
-    { day: '', contents: [{ task: '', id: '', field: '' }] },
-  ]);
+  // useEffect(() => {
+  //   getTask();
+  // }, []);
+  // useEffect(() => {
+  //   getTask();
+  // }, [count]);
+  // const [toDo, setToDo] = useState<ToDo[]>([
+  //   { day: '', contents: [{ task: '', id: '', field: '' }] },
+  // ]);
 
   return (
     <div className="AllView">
@@ -69,7 +68,7 @@ export const Dashboard = () => {
       >
         +
       </button>
-      <ViewToDo toDo={toDo} />
+      {/* <ViewToDo toDo={toDo} /> */}
     </div>
   );
 };
