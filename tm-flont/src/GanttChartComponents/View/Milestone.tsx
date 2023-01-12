@@ -3,11 +3,19 @@ import { Project } from '@/DefinitionType';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { FC, useContext, useState } from 'react';
-import { RenderContext } from '../FunctionsForGanttChart/UseContext';
-import { IsOnTerm } from '../FunctionsForGanttChart/FunctionForProject';
+import { RenderContext } from '../Function/UseContext';
+import { IsOnTerm } from '../Function/Project';
 import { ViewTaskList } from './ViewTask';
+import { Grid, styled } from '@mui/material';
 
 dayjs.extend(isBetween);
+
+const StyledDay = styled(Grid)(`
+  color: grey;
+  width:30px;
+  padding-left:10px;
+  border: solid 1px black;
+`);
 
 export const AddMileStone: FC<{
   day: string;
@@ -23,45 +31,47 @@ export const AddMileStone: FC<{
   const { render, setRender } = useContext(RenderContext);
   return (
     <div className={selectedFlag ? 'selected day' : 'day'}>
-      <div
-        onClick={(e) => {
-          if (!select[0]) {
-            const selectDay = [day];
-            setSelect(selectDay);
-            setSelectedFlag(true);
-          } else {
-            // const firstSelect = select[0];
-            setSelectedFlag(true);
-            const selectDays = select;
-            selectDays.push(day);
-            setSelect(selectDays);
-            const item = window.prompt('野菜を入力');
-            if (item) {
-              axios
-                .post('http://127.0.0.1:8000/project', {
-                  start: select[0],
-                  end: select[1],
-                  item: item,
-                  field: field,
-                })
-                .then((res) => {
-                  if (res.data.status == 100) {
-                    alert('同一エリア内での期間が重複しています。');
-                  }
-                  setRender(!render);
-                  console.log(res.data);
-                  setFlag(!flag);
-                  setSelect(['']);
-                });
+      <Grid item>
+        <div
+          onClick={(e) => {
+            if (!select[0]) {
+              const selectDay = [day];
+              setSelect(selectDay);
+              setSelectedFlag(true);
             } else {
-              setSelect(['']);
+              // const firstSelect = select[0];
+              setSelectedFlag(true);
+              const selectDays = select;
+              selectDays.push(day);
+              setSelect(selectDays);
+              const item = window.prompt('野菜を入力');
+              if (item) {
+                axios
+                  .post('http://127.0.0.1:8000/project', {
+                    start: select[0],
+                    end: select[1],
+                    item: item,
+                    field: field,
+                  })
+                  .then((res) => {
+                    if (res.data.status == 100) {
+                      alert('同一エリア内での期間が重複しています。');
+                    }
+                    setRender(!render);
+                    console.log(res.data);
+                    setFlag(!flag);
+                    setSelect(['']);
+                  });
+              } else {
+                setSelect(['']);
+              }
+              setSelectedFlag(false);
             }
-            setSelectedFlag(false);
-          }
-        }}
-      >
-        -
-      </div>
+          }}
+        >
+          -
+        </div>
+      </Grid>
     </div>
   );
 };
@@ -79,20 +89,26 @@ export const AddForm: FC<{
   const ViewAddForm = DayList.map((d, key) => {
     return (
       <div key={key}>
-        <AddMileStone
-          day={d}
-          select={select}
-          setSelect={setSelect}
-          selectedFlag={selectedFlag}
-          setSelectedFlag={setSelectedFlag}
-          field={field}
-          flag={flag}
-          setFlag={setFlag}
-        />
+        <StyledDay>
+          <AddMileStone
+            day={d}
+            select={select}
+            setSelect={setSelect}
+            selectedFlag={selectedFlag}
+            setSelectedFlag={setSelectedFlag}
+            field={field}
+            flag={flag}
+            setFlag={setFlag}
+          />
+        </StyledDay>
       </div>
     );
   });
-  return <div className="AllView">{ViewAddForm}</div>;
+  return (
+    <div className="AllView">
+      <Grid container>{ViewAddForm}</Grid>
+    </div>
+  );
 };
 
 export const Milestone: FC<{
@@ -113,7 +129,7 @@ export const Milestone: FC<{
     );
   }
   return (
-    <div>
+    <Grid item>
       <div
         className={useFlag ? 'Istrue' : ''}
         onClick={() => {
@@ -123,6 +139,6 @@ export const Milestone: FC<{
         {content}
         {task}
       </div>
-    </div>
+    </Grid>
   );
 };

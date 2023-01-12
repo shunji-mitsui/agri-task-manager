@@ -1,8 +1,8 @@
 import { useContext, FC } from 'react';
 import { Button } from '@mui/material';
 import { Project } from '@/DefinitionType';
-import { RenderContext } from '../FunctionsForGanttChart/UseContext';
-import { deleteProject } from '../FunctionsForGanttChart/FunctionForProject';
+import { RenderContext } from '../Function/UseContext';
+import { deleteProject } from '../Function/Project';
 
 export const ProjectContent: FC<{
   id: string;
@@ -12,7 +12,7 @@ export const ProjectContent: FC<{
 
   return (
     <div>
-      品目:{content}
+      {content}
       <Button
         variant="outlined"
         onClick={() => {

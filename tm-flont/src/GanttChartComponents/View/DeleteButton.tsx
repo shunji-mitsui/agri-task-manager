@@ -1,4 +1,4 @@
-import { deleteProject } from '@/GanttChartComponents/FunctionsForGanttChart/FunctionForProject';
+import { deleteProject } from '@/GanttChartComponents/Function/Project';
 import { FC } from 'react';
 
 export const DeleteProjectButton: FC<{ id: string }> = ({ id }) => {

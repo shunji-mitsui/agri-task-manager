@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-export const createField = (field: string) => {
+export const createField = (field: string, color: string) => {
   axios
     .post('http://127.0.0.1:8000/field/post', {
       field: field,
+      color: color,
     })
     .then((res) => {
       console.log(res.data);

@@ -2,10 +2,7 @@ import { FC } from 'react';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { Project } from '@/DefinitionType';
-import {
-  createTask,
-  deleteTask,
-} from '../FunctionsForGanttChart/FunctionForTask';
+import { createTask, deleteTask } from '../Function/Task';
 dayjs.extend(isBetween);
 
 const ViewTask: FC<{

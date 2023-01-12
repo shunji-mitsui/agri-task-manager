@@ -1,7 +1,4 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Button,
   Grid,
   // ListItemIcon,
@@ -12,12 +9,18 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-// import Item from '@mui/'
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { createField, deleteField, updateField } from './FunctionForField';
+
+const StyledField = styled(Grid)(`
+  color: grey;
+  width:500px;
+  padding-left:10px;
+  border: solid 1px black;
+`);
 
 const UpDateFieldForm: FC<{ id: string; name: string }> = ({ id, name }) => {
   const [changeFieldName, setChangeFieldName] = useState(true);
@@ -54,12 +57,14 @@ const UpDateFieldForm: FC<{ id: string; name: string }> = ({ id, name }) => {
 };
 
 export const EditArea = () => {
-  const [field, setField] = useState([{ field: '', id: '' }]);
+  const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+  const [field, setField] = useState([{ field: '', id: '', color: '' }]);
   const [appearCreateField, setAppearCreateField] = useState(false);
   const [fieldName, setFieldName] = useState('');
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/field/get').then((res) => {
       setField(res.data);
+      console.log(res.data);
     });
   }, []);
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -70,38 +75,22 @@ export const EditArea = () => {
 
   const view = field.map((f, key) => {
     return (
-      <Grid key={key} container rowGap={2} direction="column">
-        <Grid>
+      <Grid key={key} item direction="column">
+        <StyledField
+          sx={{
+            color: f.color,
+          }}
+        >
+          {f.color}
           <UpDateFieldForm id={f.id} name={f.field} />
-        </Grid>
-        <Grid item>
-          <Accordion
-            expanded={expanded === 'panel1'}
-            onChange={handleChange('panel1')}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel2bh-content"
-              id="panel2bh-header"
-            >
-              <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                <StyledButton variant="outlined">メニュー</StyledButton>
-              </Typography>
-              <Typography sx={{ color: 'text.secondary' }}>
-                削除や編集を行うにはクリックしてください
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <StyledButton variant="outlined">編集</StyledButton>
-              <StyledButton
-                variant="outlined"
-                onClick={() => deleteField(f.id)}
-              >
-                削除
-              </StyledButton>
-            </AccordionDetails>
-          </Accordion>
-        </Grid>
+          {/* {f.color} */}
+          <Grid item>
+            <StyledButton variant="outlined">編集</StyledButton>
+            <StyledButton variant="outlined" onClick={() => deleteField(f.id)}>
+              削除
+            </StyledButton>
+          </Grid>
+        </StyledField>
       </Grid>
     );
   });
@@ -122,13 +111,13 @@ export const EditArea = () => {
         <button
           onClick={() => {
             setAppearCreateField(false);
-            createField(fieldName);
+            createField(fieldName, randomColor);
           }}
         >
           送信
         </button>
       </div>
-      {view}
+      <Grid container>{view}</Grid>
     </div>
   );
 };
