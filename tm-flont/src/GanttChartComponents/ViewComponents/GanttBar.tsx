@@ -1,15 +1,10 @@
-import React from "react";
-import { useState, FC, ReactNode, createContext } from "react";
-import { Project } from "../../DefinitionType";
-import dayjs from "dayjs";
-import isBetween from "dayjs/plugin/isBetween";
-import { Milestone } from "./Milestone";
-import { AddForm } from "./Milestone";
+import { Project } from '@/DefinitionType';
+import { FC, useState } from 'react';
 import {
   FlagContext,
   GanttBarContext,
-} from "../FunctionsForGanttChart/UseContext";
-dayjs.extend(isBetween);
+} from '../FunctionsForGanttChart/UseContext';
+import { Milestone } from './Milestone';
 
 const ViewCalender: FC<{
   isChangeMode: boolean;
@@ -32,14 +27,13 @@ const ViewCalender: FC<{
   setTarget,
   afterDay,
   setAfterDay,
-  flag,
   p,
   d,
 }) => {
   const [onTerm, setOnTerm] = useState(false);
   // console.log('(カレンダー作成コンポーネント',p)
   return (
-    <div className="day">
+    <div>
       <FlagContext.Provider value={{ onTerm, setOnTerm }}>
         <GanttBarContext.Provider
           value={{
@@ -70,13 +64,12 @@ export const ViewGanttBar: FC<{
 }> = ({ project, DayList, flag }) => {
   const [isChangeMode, setIsChangeMode] = useState<boolean>(false);
   const [isCreateMode, setIsCreateMode] = useState<boolean>(false);
-  const [target, setTarget] = useState<string>("");
-  const [afterDay, setAfterDay] = useState<string>("");
-  const ViewProject = project.map((p) => {
-    // console.log(p)
-    const ViewDay = DayList.map((d) => {
+  const [target, setTarget] = useState<string>('');
+  const [afterDay, setAfterDay] = useState<string>('');
+  const ViewProject = project.map((p, key) => {
+    const ViewDay = DayList.map((d, key) => {
       return (
-        <div>
+        <div key={key}>
           <ViewCalender
             isChangeMode={isChangeMode}
             setIsChangeMode={setIsChangeMode}
@@ -93,7 +86,7 @@ export const ViewGanttBar: FC<{
         </div>
       );
     });
-    return <div className="AllView">{ViewDay}</div>;
+    return <div key={key}>{ViewDay}</div>;
   });
-  return <div className="">{ViewProject}</div>;
+  return <div>{ViewProject}</div>;
 };

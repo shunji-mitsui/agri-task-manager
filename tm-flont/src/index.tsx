@@ -1,15 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ViewGanttChart } from "./GanttChartConponents/ViewComponents/GanttChart";
-import { Dashboard } from "./MapComponents/ViewMap";
+import { Dashboard } from '@mui/icons-material';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { createRoot } from 'react-dom/client';
+import reportWebVitals from './reportWebVitals';
+import App from './App';
+import { ViewGanttChart } from './GanttChartComponents/ViewComponents/GanttChart';
+import { EditArea } from './GanttChartComponents/EditField/EditFieldArea';
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   // <React.StrictMode>
   <BrowserRouter>
@@ -17,9 +14,10 @@ root.render(
       <Route path="/" element={<App />}>
         <Route path="/gantt-chart" element={<ViewGanttChart />} />
         <Route path="board" element={<Dashboard />} />
+        <Route path="edit-field" element={<EditArea />} />
       </Route>
     </Routes>
-  </BrowserRouter>
+  </BrowserRouter>,
   // </React.StrictMode>
 );
 

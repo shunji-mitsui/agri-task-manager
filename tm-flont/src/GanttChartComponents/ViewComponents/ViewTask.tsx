@@ -1,12 +1,11 @@
-import React from "react";
-import { FC } from "react";
-import { Project } from "../../DefinitionType";
-import dayjs from "dayjs";
-import isBetween from "dayjs/plugin/isBetween";
+import { FC } from 'react';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
+import { Project } from '@/DefinitionType';
 import {
-  deleteTask,
   createTask,
-} from "../FunctionsForGanttChart/FunctionForTask";
+  deleteTask,
+} from '../FunctionsForGanttChart/FunctionForTask';
 dayjs.extend(isBetween);
 
 const ViewTask: FC<{
@@ -17,7 +16,7 @@ const ViewTask: FC<{
   if (!t.task) {
     return (
       <div
-        onClick={(e) => {
+        onClick={() => {
           createTask(project, day);
         }}
       >
@@ -28,7 +27,7 @@ const ViewTask: FC<{
   return (
     <div
       onClick={(e) => {
-        if (t.task != "-") {
+        if (t.task != '-') {
           deleteTask(t);
         } else {
           createTask(project, day);
@@ -44,17 +43,17 @@ export const ViewTaskList: FC<{ project: Project; day: string }> = ({
   project,
   day,
 }) => {
-  let TaskList = [{ id: "", task: "" }];
+  const TaskList = [{ id: '', task: '' }];
   project.task.map((t) => {
     if (t.date == day) {
       TaskList.push({ task: t.task, id: t.id });
     } else {
-      TaskList.push({ task: "-", id: "" });
+      TaskList.push({ task: '-', id: '' });
     }
   });
-  const View = TaskList.map((t) => {
+  const View = TaskList.map((t, key) => {
     return (
-      <div>
+      <div key={key}>
         <ViewTask project={project} t={t} day={day} />
       </div>
     );

@@ -1,8 +1,4 @@
-import React from "react";
-import { useState, FC, ReactNode, createContext } from "react";
-import dayjs from "dayjs";
-import isBetween from "dayjs/plugin/isBetween";
-dayjs.extend(isBetween);
+import { createContext, FC, ReactNode, useState } from 'react';
 
 type Children = {
   children: ReactNode;
@@ -18,7 +14,7 @@ type RenderContextType = {
 };
 
 export const RenderContext = createContext<RenderContextType>(
-  {} as RenderContextType
+  {} as RenderContextType,
 );
 
 export const RenderProvider: FC<Children> = ({ children }) => {
@@ -33,7 +29,7 @@ export const RenderProvider: FC<Children> = ({ children }) => {
 };
 
 export const FlagContext = createContext<FlagContextType>(
-  {} as FlagContextType
+  {} as FlagContextType,
 );
 export const FlagProvider: FC<Children> = ({ children }) => {
   const [onTerm, setOnTerm] = useState<boolean>(true);
@@ -58,5 +54,5 @@ type GanttBarStateContextType = {
 };
 
 export const GanttBarContext = createContext<GanttBarStateContextType>(
-  {} as GanttBarStateContextType
+  {} as GanttBarStateContextType,
 );

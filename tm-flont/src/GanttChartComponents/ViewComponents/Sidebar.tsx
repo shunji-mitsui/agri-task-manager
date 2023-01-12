@@ -1,11 +1,8 @@
-import React, { useState, useContext, FC } from "react";
-import { ViewGanttBar } from "./GanttBar";
-import { Project } from "../../DefinitionType";
-import { deleteProject } from "../FunctionsForGanttChart/FunctionForProject";
-import dayjs from "dayjs";
-import { RenderContext } from "../FunctionsForGanttChart/UseContext";
-// import { AddForm } from "./AddForm";
-// import { DeleteProjectButton } from "./DeleteButton";
+import { useContext, FC } from 'react';
+import { Button } from '@mui/material';
+import { Project } from '@/DefinitionType';
+import { RenderContext } from '../FunctionsForGanttChart/UseContext';
+import { deleteProject } from '../FunctionsForGanttChart/FunctionForProject';
 
 export const ProjectContent: FC<{
   id: string;
@@ -16,22 +13,23 @@ export const ProjectContent: FC<{
   return (
     <div>
       品目:{content}
-      <button
-        onClick={(e) => {
+      <Button
+        variant="outlined"
+        onClick={() => {
           deleteProject(id);
           setRender(!render);
         }}
       >
         削除
-      </button>
+      </Button>
     </div>
   );
 };
 
 export const ProjectSidebar: FC<{ project: Project[] }> = ({ project }) => {
-  const view = project.map((p) => {
+  const view = project.map((p, key) => {
     return (
-      <div>
+      <div key={key}>
         <div className="AllView">
           <div className="SideBar">
             <ProjectContent id={p.id} content={p.name} />

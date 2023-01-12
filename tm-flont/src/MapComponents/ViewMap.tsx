@@ -1,21 +1,5 @@
-import { useState, useEffect, createContext, useContext, FC } from "react";
-import axios from "axios";
-// import { RuleTester } from "eslint";
-// import {createTask} from '../TaskFunctions/CreateTask'
-// import { deleteTask } from "../GanttChartConponents/FunctionsForGanttChart/FunctionForTask";
-
-interface Area {
-  isUsing: boolean;
-  item?: string;
-}
-interface Map {
-  area: string;
-  Area: Area;
-}
-
-// export const ViewArea = () => {
-//   return <div>エリア出力</div>;
-// };
+import { FC, useEffect, useState } from 'react';
+import axios from 'axios';
 
 interface ToDo {
   day: string;
@@ -28,15 +12,15 @@ interface ToDo {
 }
 
 const ViewToDo: FC<{ toDo: ToDo[] }> = ({ toDo }) => {
-  const viewByDay = toDo.map((t) => {
-    const viewByTask = t.contents.map((c) => {
+  const viewByDay = toDo.map((t, key) => {
+    const viewByTask = t.contents.map((c, key) => {
       return (
-        <div>
+        <div key={key}>
           {c.task}
           {c.field}
           <br />
           <button
-            onClick={(e) => {
+            onClick={() => {
               // deleteTask({ task: c.task, id: c.id });
             }}
           >
@@ -46,7 +30,7 @@ const ViewToDo: FC<{ toDo: ToDo[] }> = ({ toDo }) => {
       );
     });
     return (
-      <div className="board-element">
+      <div key={key} className="board-element">
         <div>{t.day}</div>
         <div>{viewByTask}</div>
       </div>
@@ -58,11 +42,10 @@ const ViewToDo: FC<{ toDo: ToDo[] }> = ({ toDo }) => {
 
 export const Dashboard = () => {
   const [count, setCount] = useState(0);
-  const [taskName, setTaskName] = useState("");
 
   const getTask = async () => {
-    const result = await axios.get("http://127.0.0.1:8000/task/get");
-    console.log(result.data, "iiiiiiiiiiiiiiiiiiiii");
+    const result = await axios.get('http://127.0.0.1:8000/task/get');
+    console.log(result.data, 'iiiiiiiiiiiiiiiiiiiii');
     setToDo(result.data);
   };
 
@@ -73,14 +56,14 @@ export const Dashboard = () => {
     getTask();
   }, [count]);
   const [toDo, setToDo] = useState<ToDo[]>([
-    { day: "", contents: [{ task: "", id: "", field: "" }] },
+    { day: '', contents: [{ task: '', id: '', field: '' }] },
   ]);
 
   return (
     <div className="AllView">
       ボード
       <button
-        onClick={(e) => {
+        onClick={() => {
           setCount(count + 1);
         }}
       >
