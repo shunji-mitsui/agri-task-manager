@@ -6,7 +6,7 @@
   left: auto; */
 }
 
-.Main{
+.Main {
   position: relative;
 }
 
@@ -26,11 +26,11 @@
   background-color: #333;
 }
 
-.selected{
+.selected {
   background-color: #333;
 }
 
-.ButtonForPageChange{
+.ButtonForPageChange {
   padding-left: 100px;
 }
 
@@ -50,7 +50,7 @@
   background-color: white;
 }
 
-.GanttChart{
+.GanttChart {
   padding-top: 30px;
 }
 

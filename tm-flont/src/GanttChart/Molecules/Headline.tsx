@@ -1,16 +1,6 @@
-import { Button, Grid, styled } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { FC } from 'react';
-
-const StyledDay = styled(Grid)(`
-  color: grey;
-  width:30px;
-  text-align:center;
-  padding-left:10px;
-  border: solid 1px black;
-`);
-const StyledSideBar = styled(Grid)(`
-  width:136px;
-`);
+import { StyledDay, StyledSideBar } from '../Styled';
 
 export const HeadLineCalender: FC<{ DayList: string[] }> = ({ DayList }) => {
   const ViewDay = DayList.map((d, key) => {
@@ -36,15 +26,17 @@ export const HeadLineCalender: FC<{ DayList: string[] }> = ({ DayList }) => {
   );
 };
 
-export const HeadlineGanttChart: FC<{
+export const Headline: FC<{
   DayList: string[];
   clickCount: number;
   setClickCount: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ DayList, clickCount, setClickCount }) => {
   return (
     <Grid container>
-      <StyledSideBar item>日付</StyledSideBar>
-      <Button onClick={() => setClickCount(clickCount - 1)}>◁</Button>
+      <StyledSideBar>
+        日付
+        <Button onClick={() => setClickCount(clickCount - 1)}>◁</Button>
+      </StyledSideBar>
       <Grid item>
         <HeadLineCalender DayList={DayList} />
       </Grid>

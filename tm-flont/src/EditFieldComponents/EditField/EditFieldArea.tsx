@@ -14,13 +14,7 @@ import {
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { createField, deleteField, updateField } from './FunctionForField';
-
-const StyledField = styled(Grid)(`
-  color: grey;
-  width:500px;
-  padding-left:10px;
-  border: solid 1px black;
-`);
+import { StyledArea, StyledField } from './Styled ';
 
 const UpDateFieldForm: FC<{ id: string; name: string }> = ({ id, name }) => {
   const [changeFieldName, setChangeFieldName] = useState(true);
@@ -70,21 +64,25 @@ export const EditArea = () => {
   const view = field.map((f, key) => {
     return (
       <Grid key={key} item direction="column">
-        <StyledField
-          sx={{
-            color: f.color,
-          }}
-        >
-          {f.color}
-          <UpDateFieldForm id={f.id} name={f.field} />
-          {/* {f.color} */}
-          <Grid item>
-            <StyledButton variant="outlined">編集</StyledButton>
-            <StyledButton variant="outlined" onClick={() => deleteField(f.id)}>
-              削除
-            </StyledButton>
-          </Grid>
-        </StyledField>
+        <StyledArea>
+          <StyledField
+            sx={{
+              color: f.color,
+            }}
+          >
+            <UpDateFieldForm id={f.id} name={f.field} />
+            {/* {f.color} */}
+            <Grid item>
+              <StyledButton variant="outlined">編集</StyledButton>
+              <StyledButton
+                variant="outlined"
+                onClick={() => deleteField(f.id)}
+              >
+                削除
+              </StyledButton>
+            </Grid>
+          </StyledField>
+        </StyledArea>
       </Grid>
     );
   });

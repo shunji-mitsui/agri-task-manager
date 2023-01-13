@@ -1,10 +1,10 @@
-import { Dashboard } from '@mui/icons-material';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import App from './App';
-import { EditArea } from './GanttChartComponents/EditField/EditFieldArea';
-import { ViewGanttChart } from './GanttChartComponents/View/Templetes/GanttChart';
+import { EditArea } from './EditFieldComponents/EditField/EditFieldArea';
+import { GanttChart } from './GanttChart/Templetes/GanttChart';
+import { Board } from './Board/Board';
 
 const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -12,9 +12,9 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
-        <Route path="/gantt-chart" element={<ViewGanttChart />} />
-        <Route path="board" element={<Dashboard />} />
-        <Route path="edit-field" element={<EditArea />} />
+        <Route path="/ganttchart" element={<GanttChart />} />
+        <Route path="/edit-field" element={<EditArea />} />
+        <Route path="/board" element={<Board />} />
       </Route>
     </Routes>
   </BrowserRouter>,
