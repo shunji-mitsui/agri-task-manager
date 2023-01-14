@@ -3,29 +3,11 @@ import { Project, Task } from '@/DefinitionType';
 import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
 import { FC, useState } from 'react';
-import { createTask, deleteTask } from '../Functions';
+import { createTask, deleteTask, updateProjectDate } from '../Functions';
 import { StyledDay } from '../Styled';
-import axios from 'axios';
 import isBetween from 'dayjs/plugin/isBetween';
 
 dayjs.extend(isBetween);
-
-const updateProjectDate = (project: Project, target: string, Day: string) => {
-  axios
-    .post('http://127.0.0.1:8000/project/update', {
-      id: project.id,
-      afterDay: Day,
-      target: target,
-    })
-    .then((res) => {
-      if (res.data.status == 100) {
-        alert('その期間は別の予定が入っています。');
-      } else if (res.data.status == 101) {
-        alert('開始日が終了日よりも後になっています。');
-      }
-      console.log(res.data);
-    });
-};
 
 export const GanttBar: FC<{ project: Project; DayList: string[] }> = ({
   project,
@@ -38,10 +20,10 @@ export const GanttBar: FC<{ project: Project; DayList: string[] }> = ({
     if (dayjs(d).isBetween(project.startDate, project.endDate, null, '()')) {
       content = '●';
     } else if (d === project.startDate) {
-      content = '☆';
+      content = '●';
       target = 'start';
     } else if (d === project.endDate) {
-      content = '＊';
+      content = '●';
       target = 'end';
     } else {
       content = '○';
@@ -83,7 +65,7 @@ export const TaskCalender: FC<{ task: Task; DayList: string[] }> = ({
       content = '◉';
       targetFlag = true;
     } else {
-      content = '';
+      content = '○';
       targetFlag = false;
     }
     return (

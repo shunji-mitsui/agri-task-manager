@@ -1,7 +1,43 @@
 import { Project } from '@/DefinitionType';
 import axios from 'axios';
 
-export const getPROject = (
+export const updateProjectDate = (
+  project: Project,
+  target: string,
+  Day: string,
+) => {
+  axios
+    .post('http://127.0.0.1:8000/project/update', {
+      id: project.id,
+      afterDay: Day,
+      target: target,
+    })
+    .then((res) => {
+      if (res.data.status == 100) {
+        alert('その期間は別の予定が入っています。');
+      } else if (res.data.status == 101) {
+        alert('開始日が終了日よりも後になっています。');
+      }
+      console.log(res.data);
+    });
+};
+
+export const postProject = (
+  fieldId: string,
+  start: string,
+  end: string,
+  name: string,
+) => {
+  axios
+    .post('http://127.0.0.1:8000/project/post', {
+      fieldId: fieldId,
+      start: start,
+      end: end,
+      item: name,
+    })
+    .then((res) => console.log(res.data));
+};
+export const getProject = (
   setProject: React.Dispatch<React.SetStateAction<Project[]>>,
   fieldId: string,
 ) => {
@@ -11,6 +47,16 @@ export const getPROject = (
     })
     .then((res) => {
       setProject(res.data);
+    });
+};
+
+export const deleteProject = (id: string) => {
+  axios
+    .post('http://127.0.0.1:8000/project/delete', {
+      id: id,
+    })
+    .then((res) => {
+      alert('削除しました');
     });
 };
 
@@ -43,18 +89,4 @@ export const createTask = (id: string, day: string, newTask: string) => {
       date: day,
     })
     .then((res) => console.log(res.data));
-};
-
-export const postProject = (
-  fieldId: string,
-  start: string,
-  end: string,
-  name: string,
-) => {
-  axios.post('http://127.0.0.1:8000/project/post', {
-    fieldId: fieldId,
-    start: start,
-    end: end,
-    item: name,
-  });
 };

@@ -4,7 +4,6 @@ import { Link, Outlet } from 'react-router-dom';
 function App() {
   return (
     <div>
-      <div className="App">BeFarm</div>
       <div className="ButtonForPageChange">
         <Link to="/ganttchart">
           <Button>ガントチャート</Button>

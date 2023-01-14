@@ -55,11 +55,3 @@ export const ViewCreateTask: FC<{
     </Grid>
   );
 };
-
-// function setAddTaskFlag(arg0: boolean) {
-//   throw new Error("Function not implemented.");
-// }
-
-// function setAddTaskFlag(arg0: boolean) {
-//   throw new Error("Function not implemented.");
-// }

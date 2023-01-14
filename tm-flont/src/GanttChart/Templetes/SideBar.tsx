@@ -2,7 +2,7 @@ import { Project } from '@/DefinitionType';
 // import { RenderContext } from '../../s/Functions/UseContext';
 import { Button, Grid } from '@mui/material';
 import { FC, useEffect, useState } from 'react';
-import { getPROject, postProject } from '../Functions';
+import { getProject, postProject } from '../Functions';
 import { defaultStateProject, Field } from '../Typed';
 import { OneProjectCalender } from '../Organisms/OneProjectCalender';
 import { StyledDay, StyledInput, StyledSideBar } from '../Styled';
@@ -14,7 +14,7 @@ const ViewProject: FC<{ field: Field; DayList: string[] }> = ({
   const [project, setProject] = useState<Project[]>(defaultStateProject);
 
   useEffect(() => {
-    getPROject(setProject, field.id);
+    getProject(setProject, field.id);
   }, []);
 
   const view = project.map((p, key) => {
@@ -125,14 +125,16 @@ export const ViewField: FC<{ field: Field[]; DayList: string[] }> = ({
 }) => {
   const view = field.map((f, key) => {
     return (
-      <Grid key={key}>
-        <Grid container>
-          <Grid item>{f.field}</Grid>
-          <Grid item>
-            <AddProjectForm field={f} DayList={DayList} />
+      <Grid key={key} container>
+        <Grid item>
+          <Grid>
+            <Grid>{f.field}</Grid>
           </Grid>
         </Grid>
-        <ViewProject field={f} DayList={DayList} />
+        <Grid item>
+          <AddProjectForm field={f} DayList={DayList} />
+          <ViewProject field={f} DayList={DayList} />
+        </Grid>
       </Grid>
     );
   });

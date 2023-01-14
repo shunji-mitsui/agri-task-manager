@@ -12,7 +12,7 @@ export const GanttChart = () => {
   ]);
   const [clickCount, setClickCount] = useState(0);
 
-  const DayList = [...Array(50)].map((_, i) =>
+  const DayList = [...Array(80)].map((_, i) =>
     dayjs()
       .add(clickCount * 10, 'd')
       .add(i, 'd')
