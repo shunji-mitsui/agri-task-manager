@@ -16,7 +16,6 @@ import datetime
 from Controller.TaskController import TaskController
 from Controller.ProjectController import ProjectController
 
-# from Route import Route
 from setting import setting
 
 
@@ -173,10 +172,6 @@ def getProject():
         for t in taskdata:
             if t['parentId']==p['id']:
                 p['task'].append(t)
-
-    # for p in projectdata:
-    #     print(p['id'],'888888888888')
-    # session.close()
     session.close()
     return (projectdata)
 

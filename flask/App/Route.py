@@ -10,7 +10,3 @@ class Route:
         self.ProjectController=ProjectController(self.app)
         self.TaskController=TaskController(self.app)
         self.FieldController=FieldController(self.app)
-
-    # def setUp(self):
-        # self.app.route("/project/delete", methods=['POST'])(self.ProjectController.deleteProject)
-        # self.app.route("/task/delete", methods=['POST'])(self.TaskController.deleteTask)
