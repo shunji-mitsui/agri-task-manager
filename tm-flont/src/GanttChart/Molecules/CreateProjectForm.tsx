@@ -1,4 +1,4 @@
-import { Project } from '@/DefinitionType';
+import { Project } from '../..//DefinitionType';
 import { Button, Grid } from '@mui/material';
 import React, { FC } from 'react';
 import { StyledDay, StyledInput, StyledSideBar } from '../Styled';

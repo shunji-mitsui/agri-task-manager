@@ -1,4 +1,4 @@
-import { Project, Task } from '@/DefinitionType';
+import { Project, Task } from '../..//DefinitionType';
 // import { updateProjectDate } from '@/GanttChartComponents/Functions/Project';
 import { Grid } from '@mui/material';
 import dayjs from 'dayjs';

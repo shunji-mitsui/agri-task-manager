@@ -1,4 +1,4 @@
-import { Project } from '@/DefinitionType';
+import { Project } from '../..//DefinitionType';
 import { Grid } from '@mui/material';
 import { FC } from 'react';
 import { deleteProject } from '../Functions';
