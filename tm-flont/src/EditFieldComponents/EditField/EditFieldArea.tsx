@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Grid,
   // ListItemIcon,
   // ListItemText,
@@ -14,7 +15,23 @@ import {
 import axios from 'axios';
 import { FC, useEffect, useState } from 'react';
 import { createField, deleteField, updateField } from './FunctionForField';
-import { StyledArea, StyledField } from './Styled ';
+
+export const StyledArea = styled(Card)(`
+  
+  width:400px;
+  padding-right:10px;
+  margin-right:10px;
+  text-align:center;
+  background-color:#F9F7F5;
+
+`);
+
+export const StyledField = styled(Grid)(`
+  width:500px;
+  padding-left:10px;
+  margin-bottom:10px;
+  padding-bottom:10px;
+`);
 
 const UpDateFieldForm: FC<{ id: string; name: string }> = ({ id, name }) => {
   const [changeFieldName, setChangeFieldName] = useState(true);

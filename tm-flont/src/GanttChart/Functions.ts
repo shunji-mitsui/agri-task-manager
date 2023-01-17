@@ -1,4 +1,4 @@
-import { Project } from '@/DefinitionType';
+import { Project } from '../DefinitionType';
 import axios from 'axios';
 
 export const updateProjectDate = (
@@ -12,13 +12,13 @@ export const updateProjectDate = (
       afterDay: Day,
       target: target,
     })
-    .then((res) => {
-      if (res.data.status == 100) {
+    .then((response) => {
+      if (response.data.status == 100) {
         alert('その期間は別の予定が入っています。');
-      } else if (res.data.status == 101) {
+      } else if (response.data.status == 101) {
         alert('開始日が終了日よりも後になっています。');
       }
-      console.log(res.data);
+      console.log(response.data);
     });
 };
 
@@ -55,7 +55,7 @@ export const deleteProject = (id: string) => {
     .post('http://127.0.0.1:8000/project/delete', {
       id: id,
     })
-    .then((res) => {
+    .then(() => {
       alert('削除しました');
     });
 };
