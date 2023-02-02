@@ -12,6 +12,8 @@ from flask_cors import CORS, cross_origin
 import sqlite3
 import uuid
 import datetime
+import jsonpickle
+
 
 from Controller.TaskController import TaskController
 from Controller.ProjectController import ProjectController
@@ -56,6 +58,7 @@ class Field(Base):
     id=db.Column(db.Text,primary_key=True)
     field=db.Column(db.Text)
     color=db.Column(db.Text)
+
 class Project(Base):
     __tablename__ = 'project'
     id=db.Column(db.Text,primary_key=True)
@@ -63,6 +66,7 @@ class Project(Base):
     start=db.Column(db.Text)
     end=db.Column(db.Text)
     fieldId=db.Column(db.Text)
+
 class ChildTask(Base):
     __tablename__='childtask'
     id=db.Column(db.Text,primary_key=True)
@@ -71,14 +75,12 @@ class ChildTask(Base):
     date=db.Column(db.Text)
 
 
-# route = Route(app,ProjectController,TaskController)
-# route.setUp()
 engine = create_engine('sqlite:///AgriTaskManager.db')
 
+Session = sessionmaker(bind=engine)
+session = Session()
 @app.route('/field/get',methods =['GET'])
 def getField():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     field = session.query(Field).all()
     fielddata=[
                 {
@@ -89,13 +91,12 @@ def getField():
                 for f in field
             ]
     session.close()
-    return(fielddata)
+
+    return jsonpickle.encode(fielddata)
 
 
 @app.route("/field/post", methods=['POST'])
 def createField():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     request_data=request.json
     new=Field(id=str(uuid.uuid4()),field=request_data['field'],color=request_data['color'])
     session.add(new)
@@ -106,8 +107,6 @@ def createField():
 
 @app.route("/field/update", methods=['POST'])
 def updateField():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     request_data=request.json
     field = session.query(Field).filter_by(id=request_data['id']).first()
     field.field=request_data['name']
@@ -119,8 +118,6 @@ def updateField():
 
 @app.route("/field/delete", methods=['POST'])
 def deleteField():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     field = session.query(Field).filter_by(id=request.json['id']).first()
     project=session.query(Project).filter_by(fieldId=field.id).all()
     for p in project:
@@ -142,8 +139,6 @@ def deleteField():
 @app.route('/project/get', methods=['POST'])
 def getProject():
     id=request.json['id']
-    Session = sessionmaker(bind=engine)
-    session = Session()
     project=session.query(Project).filter_by(fieldId=request.json['id']).all()
 
     projectdata = [
@@ -172,15 +167,16 @@ def getProject():
         for t in taskdata:
             if t['parentId']==p['id']:
                 p['task'].append(t)
-    session.close()
-    return (projectdata)
+
+    response_data=tuple(projectdata)
+    print(type(response_data),'uuuuuuuuuuu')
+    return jsonpickle.encode(projectdata)
 
 
 
 @app.route('/project/post', methods=['POST'])
 def postProject():
-    Session = sessionmaker(bind=engine)
-    session = Session()
+
     project=request.json
 
 
@@ -194,13 +190,10 @@ def postProject():
     new_project=Project(id=str(uuid.uuid4()),fieldId=project['fieldId'],name=project['item'],start=project['start'],end=project['end'])
     session.add(new_project)
     session.commit()
-    session.close()
     return jsonify(project)
 
 @app.route("/project/delete", methods=['POST'])
 def deleteProject():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     request_data=request.json
     found_project = session.query(Project).filter_by(id=request_data['id']).first()
     task = session.query(ChildTask).filter_by(parentId=request_data['id']).all()
@@ -208,14 +201,13 @@ def deleteProject():
         session.delete(t)
     session.delete(found_project)
     session.commit()
-    session.close()
+
     return jsonify({'status':True})
 
 
 @app.route('/task/get', methods=['POST'])
 def getTask():
-    Session = sessionmaker(bind=engine)
-    session = Session()
+
     print(request.json,'----------------------')
     task=session.query(ChildTask).filter_by(parentId=request.json['id']).all()
     # print(task)
@@ -229,8 +221,7 @@ def getTask():
         for t in task
     ]
 
-    session.close()
-    return(taskdata)
+    return jsonpickle.encode(taskdata)
     # return({'status':True})
 
 @app.route('/board/get', methods=['GET'])
@@ -239,8 +230,6 @@ def getTaskForBoard():
     this_week=datetime.datetime.today()+datetime.timedelta(days=7)
     next_week=datetime.datetime.today()+datetime.timedelta(days=14)
     this_month=datetime.datetime.today()+datetime.timedelta(days=31)
-    Session = sessionmaker(bind=engine)
-    session = Session()
     task=session.query(ChildTask).all()
     taskdata={'this week':[],'next week':[],'this month':[]}
     datestatus='this week'
@@ -270,15 +259,11 @@ def getTaskForBoard():
         taskList.append(data)
     
 
-    session.close()
-    return(taskList)
+    return jsonpickle.encode(taskList)
     # return({'status':True})
 
 @app.route("/project/update", methods=['POST'])
 def updateProject():
-    Session = sessionmaker(bind=engine)
-    session = Session()
-
     project=request.json
 
     if project['target']=='start':
@@ -298,9 +283,7 @@ def updateProject():
             if not JudgeOnTerm(i.start,i.end,found_data.start,project['afterDay']):
                 return ({'status':101})
         found_data.end=project['afterDay']
-    
     session.commit()
-    session.close()
 
     return({'target':project['target']})
     
@@ -319,13 +302,11 @@ def updateProject():
 
 @app.route("/task/delete", methods=['POST'])
 def deleteTask():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     delete_task=request.json
     found_project = session.query(ChildTask).filter_by(id=delete_task['id']).first()
     session.delete(found_project)
     session.commit()
-    session.close()
+    return ({'status':True})
 
 
 
@@ -333,14 +314,11 @@ def deleteTask():
 
 @app.route("/task/create", methods=['POST'])
 def createTask():
-    Session = sessionmaker(bind=engine)
-    session = Session()
     new_task=request.json
     print(new_task)
     new_task=ChildTask(id=str(uuid.uuid4()),parentId=new_task['parentId'],task=new_task['task'],date=new_task['date'])
     session.add(new_task)
     session.commit()
-    session.close()
 
     return ({'status':True})
 
