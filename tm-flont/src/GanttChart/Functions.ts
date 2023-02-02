@@ -1,6 +1,8 @@
 import { Project } from '../DefinitionType';
 import axios from 'axios';
 
+const api = process.env.REACT_APP_BASE_PATH;
+
 export const updateProjectDate = (
   project: Project,
   target: string,
@@ -29,7 +31,7 @@ export const postProject = (
   name: string,
 ) => {
   axios
-    .post('http://127.0.0.1:8000/project/post', {
+    .post(`${api}/project/post`, {
       fieldId: fieldId,
       start: start,
       end: end,
@@ -41,8 +43,9 @@ export const getProject = (
   setProject: React.Dispatch<React.SetStateAction<Project[]>>,
   fieldId: string,
 ) => {
+  console.log('11111111111', api);
   axios
-    .post('http://127.0.0.1:8000/project/get', {
+    .post(`${api}/project/get`, {
       id: fieldId,
     })
     .then((res) => {
@@ -51,8 +54,9 @@ export const getProject = (
 };
 
 export const deleteProject = (id: string) => {
+  console.log('11111111111', api);
   axios
-    .post('http://127.0.0.1:8000/project/delete', {
+    .post(`${api}/project/delete`, {
       id: id,
     })
     .then(() => {
@@ -71,7 +75,7 @@ export const getField = (
     >
   >,
 ) => {
-  axios.get('http://127.0.0.1:8000/field/get').then((res) => {
+  axios.get(`${api}/field/get`).then((res) => {
     setField(res.data);
   });
 };
